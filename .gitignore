@@ -1,0 +1,13 @@
+# Ignore everything
+*
+# But not these files...
+!.gitignore
+!README.md
+# And not these directories...
+!spicymelonytwebsite/
+!spicymelonytwebsite/**
+# Ignore pycache folders
+**/__pycache__/
+spicymelonytwebsite/**/__pycache__/
+
+!index.html
