@@ -4,10 +4,10 @@
 !.gitignore
 !README.md
 # And not these directories...
-!spicymelonytwebsite/
-!spicymelonytwebsite/**
+!website/
+!website/**
 # Ignore pycache folders
 **/__pycache__/
-spicymelonytwebsite/**/__pycache__/
+website/**/__pycache__/
 
 !index.html
