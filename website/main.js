@@ -1,116 +1,171 @@
-// Canvas Animation
-class ParticleAnimation {
-    constructor() {
-        this.canvas = document.getElementById('animationCanvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.particles = [];
-        this.mousePosition = { x: 0, y: 0 };
-        
-        this.resizeCanvas();
-        this.setupEventListeners();
-        this.createParticles();
-        this.animate();
-    }
+// Matter.js module aliases
+const { Engine, World, Bodies, Body, Events, Composite } = Matter;
 
-    resizeCanvas() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
-    }
+// Interactive objects configuration
+const interactiveObjects = [
+    { name: 'Art', link: 'website/art.html', color: '#FF6B6B' },
+    { name: 'Code', link: 'website/code.html', color: '#4ECDC4' },
+    { name: 'YouTube', link: 'https://youtube.com/@YourChannel', color: '#FF0000' },
+    { name: 'GitHub', link: 'https://github.com/YourGithub', color: '#6e5494' }
+];
 
-    setupEventListeners() {
-        window.addEventListener('resize', () => this.resizeCanvas());
-        window.addEventListener('mousemove', (e) => {
-            const rect = this.canvas.getBoundingClientRect();
-            this.mousePosition.x = e.clientX - rect.left;
-            this.mousePosition.y = e.clientY - rect.top;
+const decorativeObjects = 6; // Number of non-interactive objects
+const objectSize = 60; // Size of objects
+let engine;
+let world;
+let objects = [];
+let particles = [];
+let canvas;
+
+function setup() {
+    // Create canvas inside canvas-container
+    const container = document.getElementById('canvas-container');
+    canvas = createCanvas(container.offsetWidth, container.offsetHeight);
+    canvas.parent('canvas-container');
+
+    // Initialize Matter.js engine
+    engine = Engine.create();
+    world = engine.world;
+    engine.world.gravity.y = 0.5; // Reduced gravity for water-like effect
+
+    // Create boundaries
+    const ground = Bodies.rectangle(width/2, height + 30, width, 60, { isStatic: true });
+    const leftWall = Bodies.rectangle(-30, height/2, 60, height, { isStatic: true });
+    const rightWall = Bodies.rectangle(width + 30, height/2, 60, height, { isStatic: true });
+    Composite.add(world, [ground, leftWall, rightWall]);
+
+    // Create interactive and decorative objects
+    createObjects();
+
+    // Start the engine
+    Engine.run(engine);
+
+    // Handle window resizing
+    window.addEventListener('resize', windowResized);
+}
+
+function createObjects() {
+    // Create interactive objects
+    interactiveObjects.forEach((obj, index) => {
+        const x = random(width * 0.2, width * 0.8);
+        const y = random(-500, -100);
+        const body = Bodies.circle(x, y, objectSize/2, {
+            restitution: 0.6,
+            friction: 0.1,
+            density: 0.001,
+            label: obj.name
         });
-    }
+        objects.push({ body, ...obj });
+        Composite.add(world, body);
+    });
 
-    createParticles() {
-        for (let i = 0; i < 100; i++) {
-            this.particles.push({
-                x: Math.random() * this.canvas.width,
-                y: Math.random() * this.canvas.height,
-                radius: Math.random() * 2 + 1,
-                speedX: Math.random() * 2 - 1,
-                speedY: Math.random() * 2 - 1,
-                color: `rgba(255, 255, 255, ${Math.random() * 0.5 + 0.2})`
-            });
-        }
-    }
-
-    animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        this.particles.forEach(particle => {
-            // Update position
-            particle.x += particle.speedX;
-            particle.y += particle.speedY;
-
-            // Bounce off walls
-            if (particle.x < 0 || particle.x > this.canvas.width) particle.speedX *= -1;
-            if (particle.y < 0 || particle.y > this.canvas.height) particle.speedY *= -1;
-
-            // Draw particle
-            this.ctx.beginPath();
-            this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
-            this.ctx.fillStyle = particle.color;
-            this.ctx.fill();
-
-            // Connect particles near mouse
-            const dx = this.mousePosition.x - particle.x;
-            const dy = this.mousePosition.y - particle.y;
-            const distance = Math.sqrt(dx * dx + dy * dy);
-
-            if (distance < 100) {
-                this.ctx.beginPath();
-                this.ctx.strokeStyle = `rgba(255, 255, 255, ${0.2 * (1 - distance / 100)})`;
-                this.ctx.moveTo(particle.x, particle.y);
-                this.ctx.lineTo(this.mousePosition.x, this.mousePosition.y);
-                this.ctx.stroke();
-            }
+    // Create decorative objects
+    for(let i = 0; i < decorativeObjects; i++) {
+        const x = random(width * 0.2, width * 0.8);
+        const y = random(-500, -100);
+        const body = Bodies.circle(x, y, objectSize/2 * random(0.6, 1), {
+            restitution: 0.6,
+            friction: 0.1,
+            density: 0.001,
+            label: 'decorative'
         });
-
-        requestAnimationFrame(() => this.animate());
+        objects.push({ body, color: '#666666', isDecorative: true });
+        Composite.add(world, body);
     }
 }
 
-// Portfolio Data
-const artworks = [
-    // Add your artwork data here
-    // Example: { title: 'Artwork 1', image: 'path/to/image.jpg', description: 'Description' }
-];
-
-const codeProjects = [
-    // Add your coding projects here
-    // Example: { title: 'Project 1', description: 'Description', technologies: ['HTML', 'CSS'], github: 'url' }
-];
-
-// Initialize
-document.addEventListener('DOMContentLoaded', () => {
-    // Start particle animation
-    new ParticleAnimation();
-
-    // Smooth scroll for navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-        anchor.addEventListener('click', function (e) {
-            e.preventDefault();
-            document.querySelector(this.getAttribute('href')).scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
+function draw() {
+    background(26, 26, 26);
+    
+    // Draw objects
+    objects.forEach(obj => {
+        push();
+        translate(obj.body.position.x, obj.body.position.y);
+        rotate(obj.body.angle);
+        fill(obj.color);
+        noStroke();
+        circle(0, 0, objectSize);
+        if (!obj.isDecorative) {
+            fill(255);
+            textAlign(CENTER, CENTER);
+            textSize(16);
+            text(obj.name, 0, 0);
+        }
+        pop();
     });
 
-    // Add scroll animation for sections
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in');
+    // Update and draw particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+        particles[i].update();
+        particles[i].draw();
+        if (particles[i].isDead()) {
+            particles.splice(i, 1);
+        }
+    }
+
+    // Add particles randomly
+    if (frameCount % 10 === 0) {
+        objects.forEach(obj => {
+            if (obj.body.velocity.y > 2) {
+                createParticles(obj.body.position.x, obj.body.position.y, obj.color);
             }
         });
-    }, { threshold: 0.1 });
+    }
+}
 
-    document.querySelectorAll('.section-padding').forEach(section => {
-        observer.observe(section);
+function mousePressed() {
+    // Check if clicked on any interactive object
+    objects.forEach(obj => {
+        if (!obj.isDecorative) {
+            const d = dist(mouseX, mouseY, obj.body.position.x, obj.body.position.y);
+            if (d < objectSize/2) {
+                window.location.href = obj.link;
+            }
+        }
     });
-}); 
+}
+
+function createParticles(x, y, color) {
+    for (let i = 0; i < 3; i++) {
+        particles.push(new Particle(x, y, color));
+    }
+}
+
+class Particle {
+    constructor(x, y, color) {
+        this.x = x;
+        this.y = y;
+        this.color = color;
+        this.alpha = 255;
+        this.size = random(3, 8);
+        this.vx = random(-2, 2);
+        this.vy = random(-4, -2);
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += 0.1;
+        this.alpha -= 5;
+    }
+
+    draw() {
+        noStroke();
+        fill(this.color + hex(this.alpha, 2));
+        circle(this.x, this.y, this.size);
+    }
+
+    isDead() {
+        return this.alpha <= 0;
+    }
+}
+
+function windowResized() {
+    const container = document.getElementById('canvas-container');
+    resizeCanvas(container.offsetWidth, container.offsetHeight);
+    // Update boundary positions
+    Composite.clear(world, false);
+    objects = [];
+    particles = [];
+    createObjects();
+} 
