@@ -2,24 +2,51 @@
 document.querySelectorAll('.nav-item').forEach((item, index) => {
     item.addEventListener('mouseenter', () => {
         const navItems = document.querySelectorAll('.nav-item');
+        const isMobile = window.innerWidth < 992;
         
-        if (index === 0) { // Home
-            navItems[1].classList.add('move-right');
-            navItems[2].classList.add('move-right');
-        } else if (index === 1) { // Art
-            navItems[0].classList.add('move-left');
-            navItems[2].classList.add('move-right');
-        } else if (index === 2) { // Code
-            navItems[0].classList.add('move-left');
-            navItems[1].classList.add('move-left');
+        if (isMobile) {
+            // Mobile animations (vertical)
+            if (index === 0) { // Home
+                navItems[1].classList.add('move-down');
+                navItems[2].classList.add('move-down');
+            } else if (index === 1) { // Art
+                navItems[0].classList.add('move-up');
+                navItems[2].classList.add('move-down');
+            } else if (index === 2) { // Code
+                navItems[0].classList.add('move-up');
+                navItems[1].classList.add('move-up');
+            }
+        } else {
+            // Desktop animations (horizontal)
+            if (index === 0) { // Home
+                navItems[1].classList.add('move-right');
+                navItems[2].classList.add('move-right');
+            } else if (index === 1) { // Art
+                navItems[0].classList.add('move-left');
+                navItems[2].classList.add('move-right');
+            } else if (index === 2) { // Code
+                navItems[0].classList.add('move-left');
+                navItems[1].classList.add('move-left');
+            }
         }
     });
 
     item.addEventListener('mouseleave', () => {
         document.querySelectorAll('.nav-item').forEach(navItem => {
-            navItem.classList.remove('move-left', 'move-right', 'scale-up');
+            navItem.classList.remove('move-left', 'move-right', 'move-up', 'move-down', 'scale-up');
         });
     });
+});
+
+// Also handle resize events to update animations
+let resizeTimeout;
+window.addEventListener('resize', () => {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(() => {
+        document.querySelectorAll('.nav-item').forEach(navItem => {
+            navItem.classList.remove('move-left', 'move-right', 'move-up', 'move-down', 'scale-up');
+        });
+    }, 250);
 });
 
 // Canvas setup
@@ -42,12 +69,12 @@ function setup() {
     canvas.parent('canvas-container');
     
     // Set up any initial states
-    background(240);
+    background(33); // #212121 in decimal
 }
 
 function draw() {
     // Clear background
-    background(240);
+    background(33); // #212121 in decimal
     
     // Add some simple animation
     let time = millis() * 0.001;

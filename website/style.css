@@ -24,13 +24,23 @@ header {
     flex-shrink: 0;
     background-color: rgba(26, 26, 26, 0.95);
     backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 3px solid rgba(220, 220, 220, 0.9);
     padding: 1rem 0;
 }
 
 .navbar-brand {
     font-size: 1.5rem;
     letter-spacing: 0.5px;
+    display: flex;
+    align-items: center;
+}
+
+.author-name {
+    font-size: 1.1rem;
+    font-weight: normal;
+    position: relative;
+    top: 1px;
+    margin-left: 0.5rem;
 }
 
 /* Navigation Animation Styles */
@@ -57,13 +67,32 @@ header {
     transform: scale(1.1);
 }
 
-/* Add JavaScript classes for movement */
-.move-left {
-    transform: translateX(-10px) !important;
+/* Desktop movement classes */
+@media (min-width: 992px) {
+    .move-left {
+        transform: translateX(-10px) !important;
+    }
+    
+    .move-right {
+        transform: translateX(10px) !important;
+    }
 }
 
-.move-right {
-    transform: translateX(10px) !important;
+/* Mobile movement classes */
+@media (max-width: 991px) {
+    .navbar-nav {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem 0;
+    }
+
+    .move-up {
+        transform: translateY(-10px) !important;
+    }
+    
+    .move-down {
+        transform: translateY(10px) !important;
+    }
 }
 
 .scale-up {
@@ -120,7 +149,7 @@ header {
 .footer {
     width: 100%;
     background-color: rgba(26, 26, 26, 0.98);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    border-top: 3px solid rgba(220, 220, 220, 0.9);
 }
 
 .footer h5 {
