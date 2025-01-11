@@ -101,7 +101,7 @@ class Sky {
     this.lightBlue = lerpColor(this.midBlue, this.skyBlueColor, 0.5);
     this.vertCount = 25;
     this.thinBandHeight = 10;
-
+    this.thinBandMovement = 0.0005;
     this.thinBandColors = [
       this.darkPurple,
       this.darkBlue,
@@ -112,17 +112,21 @@ class Sky {
 
     this.thinBands = [];
     for (let i = 0; i < 4; i++) {
-      let segmentCount = floor(random(20, 30));
+      let segmentCount = floor(random(10, 15));
       let segments = [];
       for (let j = 0; j < segmentCount; j++) {
-        let factor = random(1);
+        let factor = random(0.5, 1);
+        let y = floor(random(0, 41) / 10) * 10;
         segments.push({
           color: this.thinBandColors[i],
           factor: factor,
-          y: random(0, 25),
+          y: y,
           left: 0,
           right: 1,
           disabled: false,
+          direction: i % 2 === 0 ? 1 : -1,
+          speed: 1 - (y / 40) * 0.9,
+          tapered: true
         });
       }
       this.thinBands.push(segments);
@@ -246,13 +250,31 @@ class Sky {
               bandHeight / 2 +
               this.thinBandHeight * 0.5 +
               10 +
-              20,
+              20 +
+              segments[j].y,
             this.thinBandHeight,
             5,
             segments[j].color,
             segments[j].left,
-            segments[j].right
+            segments[j].right,
+            segments[j].tapered
           );
+        }
+
+        segments[j].left +=
+          this.thinBandMovement * segments[j].direction * segments[j].speed * (this.thinBands.length + 1 - i);
+        segments[j].right +=
+          this.thinBandMovement * segments[j].direction * segments[j].speed * (this.thinBands.length + 1 - i);
+
+        if ((segments[j].left > 1 && segments[j].right > 1) || (segments[j].left < 0 && segments[j].right < 0)) {
+          let delta = segments[j].right - segments[j].left;
+          if (segments[j].direction > 0) {
+            segments[j].left = -delta;
+            segments[j].right = 0;
+          } else {
+            segments[j].left = 1;
+            segments[j].right = 1 + delta;
+          }
         }
       }
     }
@@ -266,7 +288,8 @@ class Sky {
     thickness,
     bandColor,
     startT = 0,
-    endT = 1
+    endT = 1,
+    tapered = false
   ) {
     stroke(bandColor);
     strokeWeight(1);
@@ -274,40 +297,43 @@ class Sky {
     beginShape();
 
     const largerWidth = width + 200;
-    const xOffset = -100; // Shift everything left by half the extra width
+    const xOffset = -100;
 
     const centerY = yStart;
 
-    // Calculate start and end indices
-    const startIndex = Math.floor(startT * this.vertCount);
-    const endIndex = Math.ceil(endT * this.vertCount);
-
     // Starting point
-    const startX = (largerWidth / this.vertCount) * startIndex + xOffset;
-    const startTVal = startIndex / this.vertCount;
-    const startYOffset = sin(startTVal * PI) * 50;
-    vertex(startX, centerY - thickness / 2 - startYOffset);
+    const startX = lerp(xOffset, largerWidth + xOffset, startT);
+    const startYOffset = sin(startT * PI) * 50;
+    const startThickness = tapered ? 0 : thickness;
+    vertex(startX, centerY - startThickness / 2 - startYOffset);
 
-    // Top curve
-    for (let i = startIndex; i <= endIndex; i++) {
-      const x = (largerWidth / this.vertCount) * i + xOffset;
-      const t = i / this.vertCount;
+    // Top curve - use more vertices for smoother curve
+    const steps = 20;
+    for (let i = 0; i <= steps; i++) {
+      const t = lerp(startT, endT, i / steps);
+      const x = lerp(xOffset, largerWidth + xOffset, t);
       const yOffset = sin(t * PI) * 50;
-      vertex(x, centerY - thickness / 2 - yOffset);
+      const currentThickness = tapered ? 
+        thickness * sin(lerp(0, PI, (t - startT) / (endT - startT))) :
+        thickness;
+      vertex(x, centerY - currentThickness / 2 - yOffset);
     }
 
     // End point top
-    const endX = (largerWidth / this.vertCount) * endIndex + xOffset;
-    const endTVal = endIndex / this.vertCount;
-    const endYOffset = sin(endTVal * PI) * 50;
-    vertex(endX, centerY - thickness / 2 - endYOffset);
+    const endX = lerp(xOffset, largerWidth + xOffset, endT);
+    const endYOffset = sin(endT * PI) * 50;
+    const endThickness = tapered ? 0 : thickness;
+    vertex(endX, centerY - endThickness / 2 - endYOffset);
 
     // Bottom curve matches top curve but offset by thickness
-    for (let i = endIndex; i >= startIndex; i--) {
-      const x = (largerWidth / this.vertCount) * i + xOffset;
-      const t = i / this.vertCount;
+    for (let i = steps; i >= 0; i--) {
+      const t = lerp(startT, endT, i / steps);
+      const x = lerp(xOffset, largerWidth + xOffset, t);
       const yOffset = sin(t * PI) * 50;
-      vertex(x, centerY + thickness / 2 - yOffset);
+      const currentThickness = tapered ?
+        thickness * sin(lerp(0, PI, (t - startT) / (endT - startT))) :
+        thickness;
+      vertex(x, centerY + currentThickness / 2 - yOffset);
     }
 
     endShape(CLOSE);

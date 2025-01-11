@@ -89,6 +89,23 @@ function setup() {
   canvas = createCanvas(container.offsetWidth, container.offsetHeight);
   canvas.parent("canvas-container");
 
+  // Initialize context menu
+  const contextMenu = new ContextMenu();
+  
+  // Add playful label
+  contextMenu.addLabel("Trying to inspect element are ya? LOL");
+  
+  // Add options with icons
+  contextMenu.addOption("save", "Save Image", "download");
+  contextMenu.addOption("fullscreen", "Toggle Fullscreen", "fullscreen");
+
+  // Listen for option selection
+  contextMenu.onOptionSelected.on((name, id) => {
+    if (id === "save") {
+      saveCanvas(canvas, "mountain-scene", "png");
+    }
+  });
+
   // Set up sky
   skyBlueColor = color(135, 206, 235);
   sky = new Sky(skyBlueColor);
@@ -130,7 +147,7 @@ function draw() {
   // Calculate x and y offset based on mouse position
   const mouseXPercent = mouseX / width; // 0 to 1
   const mouseYPercent = mouseY / height; // 0 to 1
-  
+
   // Render mountains with parallax effect
   for (let mountain of mountains) {
     push();
@@ -138,11 +155,11 @@ function draw() {
     // Closer mountains (depth=0) move -25 to 25
     // Farther mountains (depth=0.5) move -5 to 5
     const moveRange = map(mountain.depth, 0, 0.5, 25, 5);
-    
+
     // Move in opposite direction of mouse for both x and y
     const xOffset = map(mouseXPercent, 0, 1, moveRange, -moveRange);
     const yOffset = map(mouseYPercent, 0, 1, moveRange, -moveRange);
-    
+
     translate(xOffset, yOffset);
     mountain.render();
     pop();
