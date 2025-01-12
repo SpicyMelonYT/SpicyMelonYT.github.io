@@ -91,10 +91,10 @@ function setup() {
 
   // Initialize context menu
   const contextMenu = new ContextMenu();
-  
+
   // Add playful label
   contextMenu.addLabel("Trying to inspect element are ya? LOL");
-  
+
   // Add options with icons
   contextMenu.addOption("save", "Save Image", "download");
   contextMenu.addOption("fullscreen", "Toggle Fullscreen", "fullscreen");
@@ -103,6 +103,9 @@ function setup() {
   contextMenu.onOptionSelected.on((name, id) => {
     if (id === "save") {
       saveCanvas(canvas, "mountain-scene", "png");
+    } else if (id === "fullscreen") {
+      const fs = fullscreen();
+      fullscreen(!fs);
     }
   });
 
@@ -173,6 +176,12 @@ function windowResized() {
   updateHeaderHeight();
   const container = document.getElementById("canvas-container");
   resizeCanvas(container.offsetWidth, container.offsetHeight);
+
+  sky.windowResized();
+  ground.windowResized();
+  for (let mountain of mountains) {
+    mountain.windowResized();
+  }
 }
 
 // Add event listener for when the page loads

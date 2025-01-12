@@ -2,9 +2,13 @@ class Mountain {
   constructor(x, y) {
     this.x = x;
     this.y = y;
+    this.startX = x;
+    this.startY = y;
+    this.startWidth = width;
+    this.startHeight = height;
     this.size = random(0.8, 1.2);
     this.peakCount = floor(random(1, 6));
-    this.peakSpread = random(5, 30);
+    this.peakSpread = random(5, 50);
     this.mountainWidth = random(100, 200);
     this.mountainHeight = random(25, 250);
     this.minPointHeight = 5;
@@ -55,6 +59,11 @@ class Mountain {
       const y = min(baseY + randomSpread, -this.minPointHeight);
       this.rightPoints.push({ x, y });
     }
+  }
+
+  windowResized() {
+    this.x = this.startX / this.startWidth * width;
+    this.y = this.startY / this.startHeight * height;
   }
 
   render() {
@@ -183,6 +192,10 @@ class Sky {
         }
       }
     }
+  }
+
+  windowResized() {
+    
   }
 
   render() {
@@ -391,5 +404,9 @@ class Ground {
     rect(-50, height / 2, width + 100, height / 2 + 50);
 
     pop();
+  }
+
+  windowResized() {
+
   }
 }
