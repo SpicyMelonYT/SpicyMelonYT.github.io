@@ -81,6 +81,9 @@ function updateHeaderHeight() {
 }
 
 function setup() {
+  controlledMouseX = mouseX;
+  controlledMouseY = mouseY;
+
   // Update header height before creating canvas
   updateHeaderHeight();
 
@@ -114,6 +117,8 @@ function setup() {
   // randomSeed(seed);
   // randomSeed(421860); // Nice seed for mountain positions around river
   // randomSeed(225006.23873028957);
+
+  accumulatedTime = 0;
 
   // Set up sky
   skyBlueColor = color(135, 206, 235);
@@ -169,7 +174,7 @@ function setup() {
 
     // Calculate color based on depth
     // Closer mountains are darker blue-gray, farther ones fade to sky blue
-    let mountainColor = color(100);
+    let mountainColor = color(80, 90, 100);
     mountain.baseColor = lerpColor(mountainColor, skyBlueColor, depth);
 
     mountains.push(mountain);
@@ -177,7 +182,7 @@ function setup() {
 
   // Create mountains with random depths
   for (let i = 0; i < 60; i++) {
-    let xfactor = random(0.5, 0.7);
+    let xfactor = random(0.4, 0.8);
     let depth = random(0.5, 1);
 
     let mountainSize = map(depth, 0.5, 1, 0.2, 0.1);
@@ -192,7 +197,7 @@ function setup() {
 
     // Calculate color based on depth
     // Closer mountains are darker blue-gray, farther ones fade to sky blue
-    let mountainColor = color(100);
+    let mountainColor = color(80, 90, 100);
     mountain.baseColor = lerpColor(mountainColor, skyBlueColor, depth);
 
     mountains.push(mountain);
@@ -200,18 +205,44 @@ function setup() {
 
   // Sort mountains by depth so farther ones render first
   mountains.sort((a, b) => b.depth - a.depth);
+
+  // Create trees
+  trees = [
+    new Tree(-40, 1, -0.3, 0, true),
+    new Tree(50, 1.2, -0.4, 0.1, true),
+    new Tree(-40, 1, -0.3, 0, false),
+    new Tree(50, 1.2, -0.4, 0.1, false),
+  ];
 }
 
 function draw() {
   background(skyBlueColor);
+
+  controlledMouseX = mouseX;
+  controlledMouseY = mouseY;
+
+  if (controlledMouseX < 0) {
+    controlledMouseX = 0;
+  }
+  if (controlledMouseY < 0) {
+    controlledMouseY = 0;
+  }
+  if (controlledMouseX > width) {
+    controlledMouseX = width;
+  }
+  if (controlledMouseY > height) {
+    controlledMouseY = height;
+  }
+
+  accumulatedTime += deltaTime;
 
   sky.render();
 
   ground.renderBackground();
 
   // Calculate x and y offset based on mouse position
-  const mouseXPercent = mouseX / width; // 0 to 1
-  const mouseYPercent = mouseY / height; // 0 to 1
+  const controlledMouseXPercent = controlledMouseX / width; // 0 to 1
+  const controlledMouseYPercent = controlledMouseY / height; // 0 to 1
 
   // Render mountains with parallax effect
   for (let mountain of mountains) {
@@ -227,11 +258,25 @@ function draw() {
     }
 
     // Move in opposite direction of mouse for both x and y
-    const xOffset = map(mouseXPercent, 0, 1, moveRange, -moveRange);
-    const yOffset = map(mouseYPercent, 0, 1, moveRange, -moveRange);
+    const xOffset = map(controlledMouseXPercent, 0, 1, moveRange, -moveRange);
+    const yOffset = map(controlledMouseYPercent, 0, 1, moveRange, -moveRange);
 
     translate(xOffset, yOffset);
     mountain.render();
+    pop();
+  }
+
+  // Render trees with parallax effect
+  for (let tree of trees) {
+    push();
+    // Use horizontalDepth for x movement
+    const moveRange = map(tree.horizontalDepth, 0, 0.5, 25, 5);
+    const xOffset = map(controlledMouseXPercent, 0, 1, moveRange, -moveRange);
+    // Use verticalDepth for y movement
+    const yMoveRange = map(tree.verticalDepth, -0.1, 0.5, 25, 5);
+    const yOffset = map(controlledMouseYPercent, 0, 1, yMoveRange, -yMoveRange);
+    translate(xOffset, yOffset);
+    tree.render();
     pop();
   }
 
@@ -248,6 +293,9 @@ function windowResized() {
   ground.windowResized();
   for (let mountain of mountains) {
     mountain.windowResized();
+  }
+  for (let tree of trees) {
+    tree.windowResized();
   }
 }
 
