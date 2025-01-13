@@ -62,8 +62,8 @@ class Mountain {
   }
 
   windowResized() {
-    this.x = this.startX / this.startWidth * width;
-    this.y = this.startY / this.startHeight * height;
+    this.x = (this.startX / this.startWidth) * width;
+    this.y = (this.startY / this.startHeight) * height;
   }
 
   render() {
@@ -135,7 +135,7 @@ class Sky {
           disabled: false,
           direction: i % 2 === 0 ? 1 : -1,
           speed: 1 - (y / 40) * 0.9,
-          tapered: true
+          tapered: true,
         });
       }
       this.thinBands.push(segments);
@@ -194,9 +194,7 @@ class Sky {
     }
   }
 
-  windowResized() {
-    
-  }
+  windowResized() {}
 
   render() {
     push();
@@ -275,11 +273,20 @@ class Sky {
         }
 
         segments[j].left +=
-          this.thinBandMovement * segments[j].direction * segments[j].speed * (this.thinBands.length + 1 - i);
+          this.thinBandMovement *
+          segments[j].direction *
+          segments[j].speed *
+          (this.thinBands.length + 1 - i);
         segments[j].right +=
-          this.thinBandMovement * segments[j].direction * segments[j].speed * (this.thinBands.length + 1 - i);
+          this.thinBandMovement *
+          segments[j].direction *
+          segments[j].speed *
+          (this.thinBands.length + 1 - i);
 
-        if ((segments[j].left > 1 && segments[j].right > 1) || (segments[j].left < 0 && segments[j].right < 0)) {
+        if (
+          (segments[j].left > 1 && segments[j].right > 1) ||
+          (segments[j].left < 0 && segments[j].right < 0)
+        ) {
           let delta = segments[j].right - segments[j].left;
           if (segments[j].direction > 0) {
             segments[j].left = -delta;
@@ -326,9 +333,9 @@ class Sky {
       const t = lerp(startT, endT, i / steps);
       const x = lerp(xOffset, largerWidth + xOffset, t);
       const yOffset = sin(t * PI) * 50;
-      const currentThickness = tapered ? 
-        thickness * sin(lerp(0, PI, (t - startT) / (endT - startT))) :
-        thickness;
+      const currentThickness = tapered
+        ? thickness * sin(lerp(0, PI, (t - startT) / (endT - startT)))
+        : thickness;
       vertex(x, centerY - currentThickness / 2 - yOffset);
     }
 
@@ -343,9 +350,9 @@ class Sky {
       const t = lerp(startT, endT, i / steps);
       const x = lerp(xOffset, largerWidth + xOffset, t);
       const yOffset = sin(t * PI) * 50;
-      const currentThickness = tapered ?
-        thickness * sin(lerp(0, PI, (t - startT) / (endT - startT))) :
-        thickness;
+      const currentThickness = tapered
+        ? thickness * sin(lerp(0, PI, (t - startT) / (endT - startT)))
+        : thickness;
       vertex(x, centerY + currentThickness / 2 - yOffset);
     }
 
@@ -362,6 +369,103 @@ class Ground {
     this.grassColor = color(74, 117, 43);
     this.dirtColor = color(139, 69, 19);
     this.skyColor = color(135, 206, 235);
+    this.riverColor = color(29, 134, 224);
+    this.middleRiverColor = color(22, 119, 201);
+
+    this.edgeRiverPoints = [];
+    this.edgeRiverPoints.push({ x: width * 0.5, y: height / 2, z: 0.5 });
+    this.edgeRiverPoints.push({ x: width * 0.65, y: height / 2 + 5, z: 0.425 });
+    this.edgeRiverPoints.push({ x: width * 0.7, y: height / 2 + 10, z: 0.375 });
+    this.edgeRiverPoints.push({ x: width * 0.75, y: height / 2 + 20, z: 0.25 });
+    this.edgeRiverPoints.push({ x: width * 0.85, y: height / 2 + 40, z: 0 });
+    this.edgeRiverPoints.push({ x: width * 0.6, y: height / 2 + 40, z: 0 });
+    this.edgeRiverPoints.push({ x: width * 0.65, y: height / 2 + 32, z: 0.1 });
+    this.edgeRiverPoints.push({ x: width * 0.65, y: height / 2 + 20, z: 0.25 });
+    this.edgeRiverPoints.push({
+      x: width * 0.62,
+      y: height / 2 + 10,
+      z: 0.375,
+    });
+
+    this.middleEdgeRiverPoints = [];
+    this.middleEdgeRiverPoints.push({ x: width * 0.5, y: height / 2, z: 0.5 });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.63,
+      y: height / 2 + 5,
+      z: 0.425,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.68,
+      y: height / 2 + 10,
+      z: 0.375,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.72,
+      y: height / 2 + 20,
+      z: 0.25,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.825,
+      y: height / 2 + 40,
+      z: 0,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.625,
+      y: height / 2 + 40,
+      z: 0,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.66,
+      y: height / 2 + 37,
+      z: 0.0375,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.66,
+      y: height / 2 + 20,
+      z: 0.25,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.65,
+      y: height / 2 + 15,
+      z: 0.3,
+    });
+    this.middleEdgeRiverPoints.push({
+      x: width * 0.63,
+      y: height / 2 + 8,
+      z: 0.4,
+    });
+
+    this.faceRiverPoints = [];
+    this.faceRiverPoints.push({ x: width * 0.85, y: height / 2 });
+    this.faceRiverPoints.push({ x: width * 0.6, y: height / 2 });
+    this.faceRiverPoints.push({ x: width * 0.6, y: height + 50 });
+    this.faceRiverPoints.push({ x: width * 0.85, y: height + 50 });
+
+    this.middleFaceRiverPoints = [];
+    this.middleFaceRiverPoints.push({ x: width * 0.825, y: height / 2 });
+    this.middleFaceRiverPoints.push({ x: width * 0.625, y: height / 2 });
+    this.middleFaceRiverPoints.push({ x: width * 0.625, y: height + 50 });
+    this.middleFaceRiverPoints.push({ x: width * 0.825, y: height + 50 });
+
+    for (let point of this.edgeRiverPoints) {
+      point.startXFactor = point.x / width;
+      point.startYFactor = point.y / height;
+    }
+
+    for (let point of this.middleEdgeRiverPoints) {
+      point.startXFactor = point.x / width;
+      point.startYFactor = point.y / height;
+    }
+
+    for (let point of this.faceRiverPoints) {
+      point.startXFactor = point.x / width;
+      point.startYFactor = point.y / height;
+    }
+
+    for (let point of this.middleFaceRiverPoints) {
+      point.startXFactor = point.x / width;
+      point.startYFactor = point.y / height;
+    }
   }
 
   renderBackground() {
@@ -386,6 +490,31 @@ class Ground {
       }
     }
 
+    let verticalParalaxFactor = map(mouseY, 0, height / 2, 0, 1);
+    let horizontalParalaxFactor = map(mouseX, 0, width, 1, -1);
+
+    noStroke();
+    fill(this.riverColor);
+    beginShape();
+    for (let point of this.edgeRiverPoints) {
+      vertex(
+        point.x + 50 * horizontalParalaxFactor * map(point.z, 0.5, 0, 0, 0.5),
+        lerp(point.y, height / 2, verticalParalaxFactor)
+      );
+    }
+    endShape(CLOSE);
+
+    noStroke();
+    fill(this.middleRiverColor);
+    beginShape();
+    for (let point of this.middleEdgeRiverPoints) {
+      vertex(
+        point.x + 50 * horizontalParalaxFactor * map(point.z, 0.5, 0, 0, 0.5),
+        lerp(point.y, height / 2, verticalParalaxFactor)
+      );
+    }
+    endShape(CLOSE);
+
     pop();
   }
 
@@ -403,10 +532,52 @@ class Ground {
     fill(this.grassColor);
     rect(-50, height / 2, width + 100, height / 2 + 50);
 
+    let horizontalParalaxFactor = map(mouseX, 0, width, 1, -1);
+
+    pop();
+    push();
+    translate(0, offsetY);
+
+    stroke(this.riverColor);
+    strokeWeight(1);
+    fill(this.riverColor);
+    beginShape();
+    for (let point of this.faceRiverPoints) {
+      vertex(point.x + 50 * horizontalParalaxFactor * 0.5, point.y);
+    }
+    endShape(CLOSE);
+
+    stroke(this.middleRiverColor);
+    strokeWeight(1);
+    fill(this.middleRiverColor);
+    beginShape();
+    for (let point of this.middleFaceRiverPoints) {
+      vertex(point.x + 50 * horizontalParalaxFactor * 0.5, point.y);
+    }
+    endShape(CLOSE);
+
     pop();
   }
 
   windowResized() {
+    for (let point of this.edgeRiverPoints) {
+      point.x = point.startXFactor * width;
+      point.y = point.startYFactor * height;
+    }
 
+    for (let point of this.middleEdgeRiverPoints) {
+      point.x = point.startXFactor * width;
+      point.y = point.startYFactor * height;
+    }
+
+    for (let point of this.faceRiverPoints) {
+      point.x = point.startXFactor * width;
+      point.y = point.startYFactor * height;
+    }
+
+    for (let point of this.middleFaceRiverPoints) {
+      point.x = point.startXFactor * width;
+      point.y = point.startYFactor * height;
+    }
   }
 }
