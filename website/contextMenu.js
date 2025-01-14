@@ -6,7 +6,7 @@ class ContextMenu {
         document.body.appendChild(this.menuElement);
         
         this.options = new Map();
-        this.onOptionSelected = new Event();
+        this.onOptionSelected = new SMEvent();
         
         // Close menu on clicking outside
         document.addEventListener('click', () => this.hide());

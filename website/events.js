@@ -1,4 +1,4 @@
-class Event {
+class SMEvent {
   constructor() {
     this.callbacks = [];
   }

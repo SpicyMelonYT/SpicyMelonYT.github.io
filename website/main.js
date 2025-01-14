@@ -80,6 +80,13 @@ function updateHeaderHeight() {
   );
 }
 
+let controlledWind = 0;
+let windVelocity = 0;
+let nextGustTime = 0;
+let gustDuration = 3000; // Fixed 3 second gust
+let timeBetweenGusts = 0;
+let isGusting = false;
+
 function setup() {
   controlledMouseX = mouseX;
   controlledMouseY = mouseY;
@@ -112,12 +119,6 @@ function setup() {
     }
   });
 
-  // let seed = random(0, 1000000);
-  // print(seed);
-  // randomSeed(seed);
-  // randomSeed(421860); // Nice seed for mountain positions around river
-  // randomSeed(225006.23873028957);
-
   accumulatedTime = 0;
 
   // Set up sky
@@ -126,85 +127,9 @@ function setup() {
 
   ground = new Ground();
 
-  // Mountain generation parameters
-  const exclusionZoneWidth = 0.1; // Width of the exclusion zone on each side
-
-  // Create mountains
-  mountains = [];
-  // Create mountains with random depths
-  for (let i = 0; i < 60; i++) {
-    let xfactor = random(0, 1);
-    let depth = random(0, 0.5); // Random depth between 0 (closest) and 1 (farthest)
-
-    // Calculate the exclusion center point based on depth using two segments
-    let exclusionCenter;
-    if (depth <= 0.25) {
-      // First segment: depth 0 to 0.25
-      exclusionCenter = map(depth, 0, 0.25, 0.7, 0.65);
-    } else {
-      // Second segment: depth 0.25 to 0.5
-      exclusionCenter = map(depth, 0.25, 0.5, 0.7, 0.5);
-    }
-
-    // Calculate mountain properties
-    let mountainSize = map(depth, 0, 0.5, 0.8, 0.2);
-    let mountainBaseWidth = 150; // Base width before scaling
-    let scaledWidth = mountainBaseWidth * mountainSize;
-
-    // Calculate mountain edges in normalized space (0 to 1)
-    let leftEdge = xfactor - scaledWidth / width / 2;
-    let rightEdge = xfactor + scaledWidth / width / 2;
-
-    // Skip if either edge intersects with exclusion zone
-    if (
-      abs(leftEdge - exclusionCenter) < exclusionZoneWidth ||
-      abs(rightEdge - exclusionCenter) < exclusionZoneWidth ||
-      (leftEdge < exclusionCenter && rightEdge > exclusionCenter)
-    ) {
-      continue;
-    }
-
-    let mountainX = xfactor * width;
-    let mountainY = height / 2;
-    let mountain = new Mountain(mountainX, mountainY);
-    mountain.depth = depth; // Store depth directly on mountain object
-
-    // Set size based on depth - 0.8 when depth is 0, 0.2 when depth is 0.5
-    mountain.size = mountainSize;
-
-    // Calculate color based on depth
-    // Closer mountains are darker blue-gray, farther ones fade to sky blue
-    let mountainColor = color(80, 90, 100);
-    mountain.baseColor = lerpColor(mountainColor, skyBlueColor, depth);
-
-    mountains.push(mountain);
-  }
-
-  // Create mountains with random depths
-  for (let i = 0; i < 60; i++) {
-    let xfactor = random(0.4, 0.8);
-    let depth = random(0.5, 1);
-
-    let mountainSize = map(depth, 0.5, 1, 0.2, 0.1);
-
-    let mountainX = xfactor * width;
-    let mountainY = height / 2;
-    let mountain = new Mountain(mountainX, mountainY);
-    mountain.depth = depth; // Store depth directly on mountain object
-
-    // Set size based on depth - 0.8 when depth is 0, 0.2 when depth is 0.5
-    mountain.size = mountainSize;
-
-    // Calculate color based on depth
-    // Closer mountains are darker blue-gray, farther ones fade to sky blue
-    let mountainColor = color(80, 90, 100);
-    mountain.baseColor = lerpColor(mountainColor, skyBlueColor, depth);
-
-    mountains.push(mountain);
-  }
-
-  // Sort mountains by depth so farther ones render first
-  mountains.sort((a, b) => b.depth - a.depth);
+  // Initialize clouds and mountains
+  Cloud.initialize(skyBlueColor);
+  Mountain.initialize(skyBlueColor);
 
   // Create trees
   trees = [
@@ -240,31 +165,13 @@ function draw() {
 
   ground.renderBackground();
 
+  // Render clouds before mountains
+  Cloud.renderAll();
+  Mountain.renderAll();
+
   // Calculate x and y offset based on mouse position
   const controlledMouseXPercent = controlledMouseX / width; // 0 to 1
   const controlledMouseYPercent = controlledMouseY / height; // 0 to 1
-
-  // Render mountains with parallax effect
-  for (let mountain of mountains) {
-    push();
-    // Calculate movement range based on depth
-    // Closer mountains (depth=0) move -25 to 25
-    // Farther mountains (depth=0.5) move -5 to 5
-    let moveRange = 0;
-    if (mountain.depth < 0.5) {
-      moveRange = map(mountain.depth, 0, 0.5, 25, 5);
-    } else {
-      moveRange = map(mountain.depth, 0.5, 1, 5, 0);
-    }
-
-    // Move in opposite direction of mouse for both x and y
-    const xOffset = map(controlledMouseXPercent, 0, 1, moveRange, -moveRange);
-    const yOffset = map(controlledMouseYPercent, 0, 1, moveRange, -moveRange);
-
-    translate(xOffset, yOffset);
-    mountain.render();
-    pop();
-  }
 
   // Render trees with parallax effect
   for (let tree of trees) {
@@ -280,7 +187,46 @@ function draw() {
     pop();
   }
 
+  // Update dynamic mist particles
+  ground.updateDynamicMistParticles(deltaTime / 1000); // Convert deltaTime to seconds
+
   ground.renderForeground();
+
+  // Update wind system
+  const currentTime = millis();
+  
+  // Check if it's time for a new gust
+  if (!isGusting && currentTime > nextGustTime) {
+    isGusting = true;
+    gustDuration = 3000; // Fixed 3 second duration
+    // Target velocity between 0.8 and 1.44
+    windVelocity = random(0.8, 1.44);
+    // Set end time for this gust
+    nextGustTime = currentTime + gustDuration;
+  }
+  
+  // During gust, increase controlledWind
+  if (isGusting) {
+    if (currentTime < nextGustTime) {
+      // Calculate progress through the gust (0 to 1)
+      const gustProgress = (currentTime - (nextGustTime - gustDuration)) / gustDuration;
+      
+      // Create a smooth bell curve using sine
+      const smoothStrength = sin(gustProgress * PI);
+      
+      // Apply the smooth strength to control the wind
+      controlledWind = windVelocity * smoothStrength;
+      
+    } else {
+      // End of gust
+      isGusting = false;
+      windVelocity = 0;
+      controlledWind = 0;
+      // Set next gust time (3 to 8 seconds from now)
+      timeBetweenGusts = random(3000, 8000);
+      nextGustTime = currentTime + timeBetweenGusts;
+    }
+  }
 }
 
 // Make canvas responsive
@@ -291,9 +237,8 @@ function windowResized() {
 
   sky.windowResized();
   ground.windowResized();
-  for (let mountain of mountains) {
-    mountain.windowResized();
-  }
+  Cloud.windowResized();
+  Mountain.windowResized();
   for (let tree of trees) {
     tree.windowResized();
   }
