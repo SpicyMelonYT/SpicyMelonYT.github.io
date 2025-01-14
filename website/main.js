@@ -138,6 +138,17 @@ function setup() {
     new Tree(-40, 1, -0.3, 0, false),
     new Tree(50, 1.2, -0.4, 0.1, false),
   ];
+
+  // Initialize link buttons
+  const buttonWidth = 150;
+  const buttonHeight = 40;
+  const buttonSpacing = 20;
+  const startY = height * 0.5 - buttonHeight * 7;
+
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY, buttonWidth, buttonHeight, "Art", "palette", "art.html", "danger", "light");
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight, "Code", "code-slash", "code.html", "danger", "light");
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 2, buttonWidth, buttonHeight, "YouTube", "youtube", "https://www.youtube.com/@SpicyMelonYT", "danger", "light");
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 3, buttonWidth, buttonHeight, "GitHub", "github", "https://github.com/SpicyMelonYT", "danger", "light");
 }
 
 function draw() {
@@ -192,6 +203,9 @@ function draw() {
 
   ground.renderForeground();
 
+  // Render link buttons on top of everything
+  linkButtonManager.render();
+
   // Update wind system
   const currentTime = millis();
   
@@ -242,6 +256,20 @@ function windowResized() {
   for (let tree of trees) {
     tree.windowResized();
   }
+
+  // Clear existing buttons
+  linkButtonManager.windowResized();
+  
+  // Recreate buttons with new positions
+  const buttonWidth = 150;
+  const buttonHeight = 40;
+  const buttonSpacing = 20;
+  const startY = height * 0.5 - buttonHeight * 7;
+
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY, buttonWidth, buttonHeight, "Art", "palette", "art.html", "danger", "light");
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY + buttonHeight + buttonSpacing, buttonWidth, buttonHeight, "Code", "code-slash", "code.html", "danger", "light");
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 2, buttonWidth, buttonHeight, "YouTube", "youtube", "https://youtube.com/@SpicyMelon", "danger", "light");
+  linkButtonManager.addButton(width * 0.72 - buttonWidth/2, startY + (buttonHeight + buttonSpacing) * 3, buttonWidth, buttonHeight, "GitHub", "github", "https://github.com/SpicyMelon", "danger", "light");
 }
 
 // Add event listener for when the page loads
