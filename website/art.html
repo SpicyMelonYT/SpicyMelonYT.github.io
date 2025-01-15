@@ -268,24 +268,32 @@
       }
 
       .media-container {
-        position: relative;
-        overflow: hidden;
+        position: absolute;
         width: 100%;
         height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
       }
 
       .media-modal img {
-        max-width: none;
-        max-height: none;
+        position: absolute;
         transform-origin: center;
         cursor: move;
         user-select: none;
         -webkit-user-select: none;
+        max-width: none;
+        max-height: none;
       }
 
       .media-modal video {
-        max-width: 100%;
+        max-width: 90%;
         max-height: 90vh;
+        width: auto;
+        height: auto;
         border-radius: 8px;
       }
 
@@ -404,52 +412,17 @@
 
     <!-- Footer -->
     <footer class="footer"></footer>
-
-    <!-- Media Modal -->
-    <div class="modal fade" id="mediaModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen">
-            <div class="modal-content bg-dark">
-                <div class="modal-header border-0">
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-dark zoom-out" title="Zoom Out">
-                            <i class="bi bi-zoom-out"></i>
-                        </button>
-                        <button type="button" class="btn btn-dark zoom-in" title="Zoom In">
-                            <i class="bi bi-zoom-in"></i>
-                        </button>
-                        <button type="button" class="btn btn-dark zoom-fit" title="Fit to Screen">
-                            <i class="bi bi-arrows-angle-contract"></i>
-                        </button>
-                    </div>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body p-0 d-flex align-items-center justify-content-center">
-                    <button type="button" class="modal-nav-arrow modal-nav-prev">
-                        <i class="bi bi-chevron-left"></i>
-                    </button>
-                    <button type="button" class="modal-nav-arrow modal-nav-next">
-                        <i class="bi bi-chevron-right"></i>
-                    </button>
-                    <div class="media-container position-relative overflow-hidden w-100 h-100">
-                        <!-- Media content will be inserted here -->
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
+    
+    <!-- Bootstrap and other scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- Templates -->
     <script src="templates.js"></script>
-    <!-- Project Data -->
+    <script src="modal.js"></script>
     <script src="../projects/art/projects.js"></script>
-    <!-- Project Loader -->
     <script src="projectLoader.js"></script>
     <script>
-        // Initialize templates
         initializeTemplates();
-
+        const modal = new MediaModal();
+        
         // Initialize project loader
         const loader = new ProjectLoader('art');
         
@@ -457,307 +430,10 @@
         loader.loadProjects();
         loader.renderProjects();
 
-        // Media Modal Handling
-        const modal = new bootstrap.Modal(document.getElementById('mediaModal'));
-        const mediaContainer = document.querySelector('.media-container');
-        const zoomInBtn = document.querySelector('.zoom-in');
-        const zoomOutBtn = document.querySelector('.zoom-out');
-        const zoomFitBtn = document.querySelector('.zoom-fit');
-
-        let scale = 1;
-        let panning = false;
-        let pointX = 0;
-        let pointY = 0;
-        let start = { x: 0, y: 0 };
-        let currentGalleryThumbnails = [];
-        let currentMediaIndex = 0;
-
-        function setTransform(element) {
-            element.style.transformOrigin = '0 0';
-            element.style.transform = `translate(${pointX}px, ${pointY}px) scale(${scale})`;
-        }
-
-        function fitImageToView(img) {
-            const containerWidth = mediaContainer.clientWidth;
-            const containerHeight = mediaContainer.clientHeight;
-            const imageWidth = img.naturalWidth;
-            const imageHeight = img.naturalHeight;
-
-            const containerRatio = containerWidth / containerHeight;
-            const imageRatio = imageWidth / imageHeight;
-
-            if (imageRatio > containerRatio) {
-                // Image is wider relative to container
-                scale = containerWidth / imageWidth;
-                pointX = 0;
-                pointY = (containerHeight - (imageHeight * scale)) / 2;
-            } else {
-                // Image is taller relative to container
-                scale = containerHeight / imageHeight;
-                pointX = (containerWidth - (imageWidth * scale)) / 2;
-                pointY = 0;
-            }
-
-            // Don't scale up images that are smaller than container
-            if (imageWidth <= containerWidth && imageHeight <= containerHeight) {
-                scale = 1;
-                pointX = (containerWidth - imageWidth) / 2;
-                pointY = (containerHeight - imageHeight) / 2;
-            }
-            
-            setTransform(img);
-        }
-
-        function showMedia(mediaType, src, thumbnailElement = null) {
-            if (thumbnailElement) {
-                // Find all thumbnails in the same gallery
-                const galleryContainer = thumbnailElement.closest('.grid-item');
-                currentGalleryThumbnails = Array.from(galleryContainer.querySelectorAll('.thumbnail-container img'));
-                currentMediaIndex = currentGalleryThumbnails.indexOf(thumbnailElement);
-
-                // Add or remove single-item class based on gallery size
-                const modalDialog = document.querySelector('.modal-dialog');
-                if (currentGalleryThumbnails.length <= 1) {
-                    modalDialog.classList.add('single-item');
-                } else {
-                    modalDialog.classList.remove('single-item');
-                }
-            }
-
-            // Clear existing content
-            mediaContainer.innerHTML = '';
-            scale = 1;
-            pointX = 0;
-            pointY = 0;
-
-            if (mediaType === 'video') {
-                const video = document.createElement('video');
-                video.className = 'w-100 h-auto';
-                video.controls = true;
-                video.autoplay = true;
-                video.src = src;
-                mediaContainer.appendChild(video);
-                document.querySelector('.btn-group').style.display = 'none';
-                
-                // If modal isn't already shown, show it
-                if (!modal._isShown) {
-                    modal.show();
-                }
-            } else {
-                const img = document.createElement('img');
-                img.className = 'img-fluid';
-                img.style.position = 'absolute';
-                img.style.maxWidth = 'none';
-                img.style.opacity = '0';
-                mediaContainer.appendChild(img);
-                document.querySelector('.btn-group').style.display = 'flex';
-
-                img.onload = () => {
-                    // If modal isn't already shown, show it
-                    if (!modal._isShown) {
-                        modal.show();
-                    } else {
-                        // If modal is already shown, just fit the new image
-                        fitImageToView(img);
-                        requestAnimationFrame(() => {
-                            img.style.transition = 'opacity 0.3s ease';
-                            img.style.opacity = '1';
-                        });
-                    }
-                };
-                img.src = src;
-
-                // Pan functionality
-                img.addEventListener('mousedown', (e) => {
-                    e.preventDefault();
-                    start = { x: e.clientX - pointX, y: e.clientY - pointY };
-                    panning = true;
-                    img.style.cursor = 'grabbing';
-                });
-
-                img.addEventListener('mousemove', (e) => {
-                    e.preventDefault();
-                    if (!panning) return;
-                    pointX = e.clientX - start.x;
-                    pointY = e.clientY - start.y;
-                    setTransform(img);
-                });
-
-                img.addEventListener('mouseup', () => {
-                    panning = false;
-                    img.style.cursor = 'grab';
-                });
-
-                img.addEventListener('mouseleave', () => {
-                    panning = false;
-                    img.style.cursor = 'grab';
-                });
-            }
-        }
-
-        // Handle modal events
-        const modalElement = document.getElementById('mediaModal');
-        modalElement.addEventListener('shown.bs.modal', () => {
-            const img = mediaContainer.querySelector('img');
-            if (img && img.complete) {
-                fitImageToView(img);
-                requestAnimationFrame(() => {
-                    img.style.transition = 'opacity 0.3s ease';
-                    img.style.opacity = '1';
-                });
-            }
-        });
-
-        modalElement.addEventListener('hidden.bs.modal', () => {
-            const video = mediaContainer.querySelector('video');
-            if (video) {
-                video.pause();
-                video.src = '';
-            }
-            mediaContainer.innerHTML = '';
-        });
-
-        // Zoom controls
-        zoomInBtn.addEventListener('click', () => {
-            const img = mediaContainer.querySelector('img');
-            if (!img) return;
-            
-            // Calculate center of view relative to the image
-            const containerWidth = mediaContainer.clientWidth;
-            const containerHeight = mediaContainer.clientHeight;
-            const viewCenterX = containerWidth / 2;
-            const viewCenterY = containerHeight / 2;
-            
-            // Convert view center to image coordinates
-            const imageX = (viewCenterX - pointX) / scale;
-            const imageY = (viewCenterY - pointY) / scale;
-            
-            // Calculate new scale
-            const newScale = Math.min(scale * 1.2, 3);
-            
-            // Adjust position to keep the view center point at the same place
-            pointX = viewCenterX - imageX * newScale;
-            pointY = viewCenterY - imageY * newScale;
-            
-            scale = newScale;
-            setTransform(img);
-        });
-
-        zoomOutBtn.addEventListener('click', () => {
-            const img = mediaContainer.querySelector('img');
-            if (!img) return;
-            
-            // Calculate center of view relative to the image
-            const containerWidth = mediaContainer.clientWidth;
-            const containerHeight = mediaContainer.clientHeight;
-            const viewCenterX = containerWidth / 2;
-            const viewCenterY = containerHeight / 2;
-            
-            // Convert view center to image coordinates
-            const imageX = (viewCenterX - pointX) / scale;
-            const imageY = (viewCenterY - pointY) / scale;
-            
-            // Calculate new scale
-            const newScale = Math.max(scale / 1.2, 0.5);
-            
-            // Adjust position to keep the view center point at the same place
-            pointX = viewCenterX - imageX * newScale;
-            pointY = viewCenterY - imageY * newScale;
-            
-            scale = newScale;
-            setTransform(img);
-        });
-
-        zoomFitBtn.addEventListener('click', () => {
-            const img = mediaContainer.querySelector('img');
-            if (!img) return;
-            fitImageToView(img);
-        });
-
-        // Smooth zoom with mouse wheel
-        mediaContainer.addEventListener('wheel', (e) => {
-            const img = mediaContainer.querySelector('img');
-            if (!img) return;
-            e.preventDefault();
-            
-            // Calculate point to zoom into (mouse position)
-            const rect = mediaContainer.getBoundingClientRect();
-            const mouseX = e.clientX - rect.left;
-            const mouseY = e.clientY - rect.top;
-            
-            // Convert mouse position to image coordinates
-            const imageX = (mouseX - pointX) / scale;
-            const imageY = (mouseY - pointY) / scale;
-            
-            // Calculate new scale
-            const delta = e.deltaY > 0 ? 0.9 : 1.1;
-            const newScale = Math.min(Math.max(scale * delta, 0.5), 3);
-            
-            // Adjust position to keep the mouse point at the same place
-            pointX = mouseX - imageX * newScale;
-            pointY = mouseY - imageY * newScale;
-            
-            scale = newScale;
-            setTransform(img);
-        }, { passive: false });
-
-        // Navigation functions
-        function navigateMedia(direction) {
-            if (currentGalleryThumbnails.length <= 1) return;
-
-            // Calculate new index
-            let newIndex = currentMediaIndex;
-            if (direction === 'prev') {
-                newIndex = (currentMediaIndex - 1 + currentGalleryThumbnails.length) % currentGalleryThumbnails.length;
-            } else {
-                newIndex = (currentMediaIndex + 1) % currentGalleryThumbnails.length;
-            }
-
-            // Get the new thumbnail and its media info
-            const newThumbnail = currentGalleryThumbnails[newIndex];
-            const mediaType = newThumbnail.dataset.mediaType;
-            const videoSrc = newThumbnail.dataset.videoSrc;
-            
-            // Show the new media
-            showMedia(mediaType, mediaType === 'video' ? videoSrc : newThumbnail.src, newThumbnail);
-        }
-
-        // Handle keyboard navigation
-        document.addEventListener('keydown', (e) => {
-            if (!modal._isShown) return; // Only handle keys when modal is open
-            
-            if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
-                e.preventDefault();
-                navigateMedia(e.key === 'ArrowLeft' ? 'prev' : 'next');
-            }
-        });
-
-        // Handle arrow button clicks
-        document.querySelector('.modal-nav-prev').addEventListener('click', () => {
-            navigateMedia('prev');
-        });
-
-        document.querySelector('.modal-nav-next').addEventListener('click', () => {
-            navigateMedia('next');
-        });
-
-        // Update click handler for thumbnails
-        document.addEventListener('click', (e) => {
-            const thumbnail = e.target.closest('.thumbnail-container img');
-            if (thumbnail) {
-                const mediaType = thumbnail.dataset.mediaType;
-                const videoSrc = thumbnail.dataset.videoSrc;
-                showMedia(mediaType, mediaType === 'video' ? videoSrc : thumbnail.src, thumbnail);
-            }
-        });
-
         // Clean up when navigating away
         window.addEventListener('unload', () => {
             loader.cleanup();
         });
-
-        // Set copyright year
-        document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
   </body>
 </html>
