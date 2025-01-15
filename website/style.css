@@ -221,3 +221,12 @@ header {
     margin-bottom: 4px;
     user-select: none;
 }
+
+/* Chess icon hover effect */
+.chess-icon {
+    color: inherit;
+}
+
+.social-links a:hover .chess-icon {
+    color: var(--primary-color);
+}

@@ -44,10 +44,10 @@ const templates = {
                 <div class="col-md-4">
                     <h5 class="mb-3 text-danger">Connect</h5>
                     <div class="social-links">
-                        <a href="#" class="text-light me-3"><i class="bi bi-youtube"></i></a>
-                        <a href="#" class="text-light me-3"><i class="bi bi-twitter-x"></i></a>
-                        <a href="#" class="text-light me-3"><i class="bi bi-github"></i></a>
-                        <a href="#" class="text-light"><i class="bi bi-envelope"></i></a>
+                        <a href="https://www.youtube.com/@SpicyMelonYT" class="text-light me-3" target="_blank" title="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="https://www.chess.com/member/spicymelon123" class="text-light me-3" target="_blank" title="Chess.com" style="text-decoration: none;"><span class="chess-icon" style="font-size: 1.5rem; font-weight: bold; display: inline-block; transition: color 0.3s ease;">♟</span></a>
+                        <a href="https://github.com/SpicyMelonYT" class="text-light me-3" target="_blank" title="GitHub"><i class="bi bi-github"></i></a>
+                        <a href="mailto:MatthewSanchezArt@gmail.com" class="text-light" title="Email"><i class="bi bi-envelope"></i></a>
                     </div>
                 </div>
             </div>
