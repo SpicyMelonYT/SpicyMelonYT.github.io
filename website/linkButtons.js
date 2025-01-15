@@ -189,9 +189,4 @@ class LinkButtonManager {
 }
 
 // Create global instance
-let linkButtonManager = new LinkButtonManager();
-
-// Add mousePressed handler
-function mousePressed() {
-    linkButtonManager.checkClicks();
-} 
+let linkButtonManager = new LinkButtonManager(); 

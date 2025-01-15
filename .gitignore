@@ -6,6 +6,9 @@
 # And not these directories...
 !website/
 !website/**
+!projects/
+!projects/**
+
 # Ignore pycache folders
 **/__pycache__/
 website/**/__pycache__/

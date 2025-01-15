@@ -67,7 +67,7 @@ header {
     transform: scale(1.1);
 }
 
-/* Desktop movement classes */
+/* Desktop movement classes and effects */
 @media (min-width: 992px) {
     .move-left {
         transform: translateX(-10px) !important;
@@ -76,9 +76,18 @@ header {
     .move-right {
         transform: translateX(10px) !important;
     }
+
+    /* Dynamic hover effects for desktop */
+    .nav-item:hover ~ .nav-item {
+        transform: translateX(10px);
+    }
+
+    .nav-item:has(~ .nav-item:hover) {
+        transform: translateX(-10px);
+    }
 }
 
-/* Mobile movement classes */
+/* Mobile movement classes and effects */
 @media (max-width: 991px) {
     .navbar-nav {
         flex-direction: column;
@@ -93,43 +102,19 @@ header {
     .move-down {
         transform: translateY(10px) !important;
     }
+
+    /* Dynamic hover effects for mobile */
+    .nav-item:hover ~ .nav-item {
+        transform: translateY(10px);
+    }
+
+    .nav-item:has(~ .nav-item:hover) {
+        transform: translateY(-10px);
+    }
 }
 
 .scale-up {
     transform: scale(1.1) !important;
-}
-
-/* Home hover - push others right */
-.nav-item:first-child:hover + .nav-item {
-    transform: translateX(10px);
-}
-.nav-item:first-child:hover + .nav-item + .nav-item {
-    transform: translateX(10px);
-}
-
-/* Art hover - push left and right */
-.nav-item:nth-child(2):hover + .nav-item {
-    transform: translateX(10px);
-}
-.nav-item:nth-child(2):hover {
-    transform: scale(1.1);
-}
-.nav-item:nth-child(2):hover ~ .nav-item {
-    transform: translateX(10px);
-}
-.nav-item:first-child:has(+ .nav-item:hover) {
-    transform: translateX(-10px);
-}
-
-/* Code hover - push others left */
-.nav-item:last-child:hover {
-    transform: scale(1.1);
-}
-.nav-item:first-child:has(+ .nav-item + .nav-item:hover) {
-    transform: translateX(-10px);
-}
-.nav-item:nth-child(2):has(+ .nav-item:hover) {
-    transform: translateX(-10px);
 }
 
 /* Canvas Container */
