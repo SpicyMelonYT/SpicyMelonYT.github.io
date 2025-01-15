@@ -26,6 +26,8 @@ header {
     backdrop-filter: blur(10px);
     border-bottom: 3px solid rgba(220, 220, 220, 0.9);
     padding: 1rem 0;
+    z-index: 200;
+    position: relative;
 }
 
 .navbar-brand {

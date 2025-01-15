@@ -30,7 +30,7 @@ class LinkButton {
         this.element.style.alignItems = 'center';
         this.element.style.justifyContent = 'center';
         this.element.style.gap = '8px';
-        this.element.style.zIndex = '100';
+        this.element.style.zIndex = '50';
         this.element.style.padding = '0';
         this.element.style.fontSize = '14px';
         this.element.style.fontWeight = '500';

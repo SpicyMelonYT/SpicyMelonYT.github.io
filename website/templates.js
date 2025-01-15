@@ -3,6 +3,7 @@ const templates = {
     header: () => `
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.html">
+                <img src="SpicyMelonLogo.png" alt="SpicyMelon Logo" width="35" height="35" class="d-inline-block align-middle me-3">
                 <span class="text-danger">Spicy</span>Melon<span class="text-secondary author-name">&nbsp;-&nbsp;&nbsp;Matthew Sanchez</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
