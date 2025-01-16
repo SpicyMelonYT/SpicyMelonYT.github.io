@@ -291,6 +291,7 @@ class ProjectLoader {
                                     loading="lazy"
                                     data-media-type="${thumbnail.video ? 'video' : 'image'}"
                                     ${thumbnail.video ? `data-video-src="../projects/art/${thumbnail.video}"` : ''}
+                                    ${thumbnail.title ? `data-title="${thumbnail.title}"` : ''}
                                 >
                                 ${thumbnail.video ? `
                                 <div class="video-indicator">
@@ -584,6 +585,7 @@ class ProjectLoader {
                                     loading="lazy"
                                     data-media-type="${thumbnail.video ? 'video' : 'image'}"
                                     ${thumbnail.video ? `data-video-src="../projects/code/${thumbnail.video}"` : ''}
+                                    ${thumbnail.title ? `data-title="${thumbnail.title}"` : ''}
                                 >
                                 ${thumbnail.video ? `
                                 <div class="video-indicator">

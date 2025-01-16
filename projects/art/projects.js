@@ -5,8 +5,13 @@ const ART_PROJECTS = {
     "minecraft_renders",
     "photoshop_art",
     "animated_graphics",
+    "still_graphics",
     "jade_sword_lore",
     "the_janitors_night_shift",
+    "scene_stuff",
+    "still_life",
+    "music",
+    "school_assignments",
   ],
   data: {
     wendigo: {
@@ -23,7 +28,7 @@ const ART_PROJECTS = {
       ],
       links: [],
       date: "December 2022",
-      tags: ["Horror", "Animation", "Character Design"],
+      tags: ["Horror", "Animation", "Character Design", "Maya/Blender"],
       backgroundColor: "#3A0C0C",
       primaryColor: "#DB3434",
     },
@@ -80,8 +85,8 @@ const ART_PROJECTS = {
       size: { width: 2, height: 2 },
       thumbnails: [
         { image: "jade_sword_lore/landscape_day.png" },
-        { image: "jade_sword_lore/landscape_night1.png" },
-        { image: "jade_sword_lore/landscape_night2.png" },
+        { image: "jade_sword_lore/landscape_night_1.png" },
+        { image: "jade_sword_lore/landscape_night_2.png" },
         { image: "jade_sword_lore/cave_sword.png" },
       ],
       links: [],
@@ -127,28 +132,155 @@ const ART_PROJECTS = {
       primaryColor: "#BACDFF",
     },
 
+    still_graphics: {
+      title: "3D Still Graphics",
+      description: "A collection of visually interesting 3D still images",
+      size: { width: 1, height: 1 },
+      thumbnails: [
+        {
+          image: "still_graphics/alone.png",
+        },
+        {
+          image: "still_graphics/fractal_light_rain.png",
+        },
+        {
+          image: "still_graphics/digital_color_city.png",
+        },
+        {
+          image: "still_graphics/atomic_dark_orbs.png",
+        },
+        {
+          image: "still_graphics/metal_cube_in_caustic_pool.png",
+        },
+      ],
+      links: [],
+      date: "",
+      tags: ["Graphics", "Blender"],
+      backgroundColor: "#001d3d",
+      primaryColor: "#ffd60a",
+    },
+
     the_janitors_night_shift: {
       title: "The Janitor's Night Shift",
       description:
-        "This is temporary but use the link to watch<br><br>My work here centers on a first-person horror game trailer where players become a night shift janitor at an art gallery. The concept blends mundane tasks with growing unease and dread from unseen threats. The core experience focuses on keeping players in a state of tension through uncertainty. While this trailer serves as a proof of concept to generate excitement for the full game, it aims to create a unique and resonant horror experience that stands apart from conventional entries in the genre.",
+        "My work here centers on a first-person horror game trailer where players become a night shift janitor at an art gallery. The concept blends mundane tasks with growing unease and dread from unseen threats. The core experience focuses on keeping players in a state of tension through uncertainty. While this trailer serves as a proof of concept to generate excitement for the full game, it aims to create a unique and resonant horror experience that stands apart from conventional entries in the genre.",
       size: { width: 2, height: 2 },
       thumbnails: [
         {
           image: "the_janitors_night_shift/thumbnail.png",
           video: "https://youtu.be/JLlryaUJT_g?si=cEn3oVFuHfmQO0GK",
+          title: "The Janitor's Night Shift",
         },
       ],
-      links: [
-        {
-          text: "YouTube Link To Watch",
-          url: "https://youtu.be/JLlryaUJT_g?si=cEn3oVFuHfmQO0GK",
-          icon: "youtube",
-        },
-      ],
-      date: "",
+      links: [],
+      date: "December 2022",
       tags: ["Horror", "Art Gallery", "Blender"],
       backgroundColor: "#3A0C0C",
       primaryColor: "#DB3434",
+    },
+
+    scene_stuff: {
+      title: "Scene Stuff",
+      description: "A collection of scenes with no category",
+      size: { width: 1, height: 2 },
+      thumbnails: [
+        {
+          image: "scene_stuff/living_room.png",
+        },
+        {
+          image: "scene_stuff/ancient_ritual_temple.png",
+        },
+
+        {
+          image: "scene_stuff/forest_wisp_1.png",
+        },
+
+        {
+          image: "scene_stuff/forest_wisp_2.png",
+        },
+      ],
+      links: [],
+      date: "",
+      tags: ["Scene", "Blender"],
+      backgroundColor: "#E36111",
+      primaryColor: "#FFEA00",
+    },
+
+    still_life: {
+      title: "Still Life",
+      description:
+        "In a few classes in school we got to make still life images. Still life art is esssencially a study of how light and shadow plays an effect on the objects in a scene. But it can also be used to create something that is out of place and yet feels like it fits or belongs.",
+      size: { width: 2, height: 2 },
+      thumbnails: [
+        {
+          image: "still_life/food_and_gun.png",
+        },
+        {
+          image: "still_life/fruit_bowl.png",
+        },
+        {
+          image: "still_life/pottery_cabin.png",
+        },
+      ],
+      links: [],
+      date: "",
+      tags: ["Still Life", "Blender"],
+      backgroundColor: "#300B49",
+      primaryColor: "#FFA538",
+    },
+
+    music: {
+      title: "Music",
+      description: "A collection of music I have made",
+      size: { width: 1, height: 2 },
+      thumbnails: [
+        {
+          image: "music/melody_beats.png",
+          video: "music/melody_beats.mp4",
+        },
+      ],
+      links: [],
+      date: "",
+      tags: ["Music", "GarageBand"],
+      backgroundColor: "#6F0334",
+      primaryColor: "#6FE9FF",
+    },
+
+    school_assignments: {
+      title: "School Assignments",
+      description: "",
+      size: { width: 3, height: 2 },
+      thumbnails: [
+        {
+          image: "school_assignments/interior_room_from_reference.png",
+          video: "school_assignments/interior_room_from_reference.mp4",
+        },
+        {
+          image: "school_assignments/dice_simulation.jpg",
+          video: "school_assignments/dice_simulation.mp4",
+        },
+        {
+          image: "school_assignments/lamp.png",
+          video: "school_assignments/lamp.mp4",
+        },
+        {
+          image: "school_assignments/planets.png",
+          video: "school_assignments/planets.mp4",
+        },
+        {
+          image: "school_assignments/butterfly.png",
+          video: "school_assignments/butterfly.mp4",
+        },
+        {
+          image: "school_assignments/dragon_zbrush.jpg",
+          video: "school_assignments/dragon_zbrush.mp4",
+        },
+      ],
+      links: [],
+      date: "",
+      tags: ["School Assignments", "CSUN"],
+      backgroundColor: "#014B58",
+      primaryColor: "#FFE7AF",
     },
   },
 };

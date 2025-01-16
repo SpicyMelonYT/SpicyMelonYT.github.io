@@ -45,6 +45,19 @@ const modalStyles = `
         height: auto;
         border-radius: 8px;
     }
+
+    .media-title {
+        position: fixed;
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        color: white;
+        background: rgba(0, 0, 0, 0.7);
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 1.1em;
+        z-index: 1002;
+    }
 `;
 
 // Modal HTML template
@@ -166,16 +179,61 @@ class MediaModal {
         this.pointX = 0;
         this.pointY = 0;
 
+        // Create and add title
+        const oldTitle = this.modalElement.querySelector('.media-title');
+        if (oldTitle) oldTitle.remove();
+
+        const title = document.createElement('div');
+        title.className = 'media-title';
+        
+        // Use title from dataset if available, otherwise format filename
+        let titleText;
+        if (thumbnailElement && thumbnailElement.dataset.title) {
+            titleText = thumbnailElement.dataset.title;
+        } else {
+            const filename = src.split('/').pop().split('?')[0]; // Remove path and query params
+            titleText = filename
+                .replace(/\.[^/.]+$/, '') // Remove file extension
+                .split('_')
+                .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                .join(' ');
+        }
+        title.textContent = titleText;
+        this.modalElement.appendChild(title);
+
         if (mediaType === 'video') {
-            const video = document.createElement('video');
-            video.className = 'w-100 h-auto';
-            video.controls = true;
-            video.autoplay = true;
-            video.style.maxWidth = '90%';
-            video.style.maxHeight = '90vh';
-            video.src = src;
-            this.mediaContainer.appendChild(video);
+            // Hide zoom controls for videos
             this.modalElement.querySelector('.btn-group').style.display = 'none';
+
+            if (src.includes('youtu.be/') || src.includes('youtube.com/')) {
+                // Convert YouTube URL to embed URL
+                const videoId = src.includes('youtu.be/') 
+                    ? src.split('youtu.be/')[1].split('?')[0]
+                    : src.split('v=')[1].split('&')[0];
+                
+                const iframe = document.createElement('iframe');
+                iframe.className = 'w-100 h-auto';
+                iframe.style.maxWidth = '90%';
+                iframe.style.maxHeight = '90vh';
+                iframe.style.aspectRatio = '16/9';
+                iframe.src = `https://www.youtube.com/embed/${videoId}`;
+                iframe.title = 'YouTube video player';
+                iframe.frameBorder = '0';
+                iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture';
+                iframe.allowFullscreen = true;
+                
+                this.mediaContainer.appendChild(iframe);
+            } else {
+                // Handle regular video files
+                const video = document.createElement('video');
+                video.className = 'w-100 h-auto';
+                video.controls = true;
+                video.autoplay = true;
+                video.style.maxWidth = '90%';
+                video.style.maxHeight = '90vh';
+                video.src = src;
+                this.mediaContainer.appendChild(video);
+            }
             
             if (!this.modal._isShown) {
                 this.modal.show();
