@@ -1,368 +1,377 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Code - SpicyMelon</title>
     <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
     <!-- Bootstrap Icons -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
     <!-- Masonry -->
     <script src="https://cdn.jsdelivr.net/npm/masonry-layout@4.2.2/dist/masonry.pkgd.min.js"></script>
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css" />
     <style>
-        body {
-            min-height: 100vh;
-            display: grid;
-            grid-template-rows: auto 1fr auto;
-            grid-template-areas: 
-                "header"
-                "content"
-                "footer";
-        }
+      body {
+        min-height: 100vh;
+        display: grid;
+        grid-template-rows: auto 1fr auto;
+        grid-template-areas:
+          "header"
+          "content"
+          "footer";
+      }
 
-        header {
-            grid-area: header;
-        }
+      header {
+        grid-area: header;
+      }
 
-        .content-container {
-            grid-area: content;
-            padding: 2rem 0;
-            display: flex;
-            flex-direction: column;
-        }
+      .content-container {
+        grid-area: content;
+        padding: 2rem 0;
+        display: flex;
+        flex-direction: column;
+      }
 
-        .grid-container {
-            flex: 1;
-            position: relative;
-            width: 100%;
-            margin-bottom: 2rem;
-            min-height: 0; /* Allow container to shrink */
-        }
+      .grid-container {
+        flex: 1;
+        position: relative;
+        width: 100%;
+        margin-bottom: 2rem;
+        min-height: 0; /* Allow container to shrink */
+      }
 
-        .grid {
-            margin: 0 auto;
-            position: relative;
-        }
+      .grid {
+        margin: 0 auto;
+        position: relative;
+      }
 
-        .footer {
-            grid-area: footer;
-            height: var(--footer-height);
-            visibility: visible;
-        }
+      .footer {
+        grid-area: footer;
+        height: var(--footer-height);
+        visibility: visible;
+      }
 
-        .grid-item {
-            background: rgba(26, 26, 26, 0.95);
-            border-radius: 8px;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(220, 220, 220, 0.2);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-        }
-        
-        .grid-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 0px 15px rgb(255, 158, 2);
-        }
+      .grid-item {
+        background: rgba(26, 26, 26, 0.95);
+        border-radius: 8px;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(220, 220, 220, 0.2);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+      }
 
-        .grid-item-content {
-            padding: 20px;
-            color: #fff;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+      .grid-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 0px 15px rgb(255, 158, 2);
+      }
 
-        .grid-item-title {
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-            color: #dc3545;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
+      .grid-item-content {
+        padding: 20px;
+        color: #fff;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
 
-        .grid-item-title i {
-            font-size: 1.4rem;
-        }
+      .grid-item-title {
+        font-size: 1.2rem;
+        margin-bottom: 8px;
+        color: #dc3545;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
 
-        .project-date {
-            margin-left: auto;
-            font-size: 0.85rem;
-            color: rgba(255, 255, 255, 0.6);
-            font-weight: normal;
-        }
+      .grid-item-title i {
+        font-size: 1.4rem;
+      }
 
-        /* Gallery styles */
-        .code-gallery {
-            position: absolute;
-            left: 20px;
-            right: 20px;
-            top: calc(var(--content-top) + 10px);
-            bottom: 60px;
-            overflow: hidden;
-            background: rgba(220, 53, 69, 0.1);
-            max-height: calc(100% - var(--content-top) - 70px);
-            border-radius: 8px;
-        }
+      .project-date {
+        margin-left: auto;
+        font-size: 0.85rem;
+        color: rgba(255, 255, 255, 0.6);
+        font-weight: normal;
+      }
 
-        .has-project-link .code-gallery {
-            bottom: 100px;
-        }
+      /* Gallery styles */
+      .code-gallery {
+        position: absolute;
+        left: 20px;
+        right: 20px;
+        top: calc(var(--content-top) + 10px);
+        bottom: 60px;
+        overflow: hidden;
+        background: rgba(220, 53, 69, 0.1);
+        max-height: calc(100% - var(--content-top) - 70px);
+        border-radius: 8px;
+      }
 
-        .thumbnail-container {
-            position: absolute;
-            min-width: 50px;
-            min-height: 50px;
-            opacity: 0;
-            cursor: pointer;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+      .has-project-link .code-gallery {
+        bottom: 100px;
+      }
 
-        .code-thumbnail {
-            position: absolute;
-            object-fit: cover;
-            border-radius: 8px;
-            background: none;
-            border: none;
-            width: 100%;
-            height: 100%;
-            transition: transform 0.2s ease;
-        }
+      .thumbnail-container {
+        position: absolute;
+        min-width: 50px;
+        min-height: 50px;
+        opacity: 0;
+        cursor: pointer;
+        border-radius: 8px;
+        overflow: hidden;
+      }
 
-        .thumbnail-container:hover .code-thumbnail {
-            transform: scale(1.02);
-        }
+      .code-thumbnail {
+        position: absolute;
+        object-fit: cover;
+        border-radius: 8px;
+        background: none;
+        border: none;
+        width: 100%;
+        height: 100%;
+        transition: transform 0.2s ease;
+      }
 
-        /* Initial load fade in */
-        .thumbnail-container.loaded {
-            opacity: 1;
-        }
+      .thumbnail-container:hover .code-thumbnail {
+        transform: scale(1.02);
+      }
 
-        /* Position/size transitions */
-        .thumbnail-container.layout-transition {
-            transition: left 0.2s ease-out, top 0.2s ease-out, width 0.2s ease-out, height 0.2s ease-out;
-        }
+      /* Initial load fade in */
+      .thumbnail-container.loaded {
+        opacity: 1;
+      }
 
-        .video-indicator {
-            position: absolute;
-            bottom: 8px;
-            right: 8px;
-            background: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 4px;
-            border-radius: 50%;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: none;
-            transition: transform 0.2s ease, background-color 0.2s ease;
-        }
+      /* Position/size transitions */
+      .thumbnail-container.layout-transition {
+        transition: left 0.2s ease-out, top 0.2s ease-out, width 0.2s ease-out,
+          height 0.2s ease-out;
+      }
 
-        .thumbnail-container:hover .video-indicator {
-            transform: scale(1.1);
-            background: rgba(220, 53, 69, 0.9);
-        }
+      .video-indicator {
+        position: absolute;
+        bottom: 8px;
+        right: 8px;
+        background: rgba(0, 0, 0, 0.7);
+        color: white;
+        padding: 4px;
+        border-radius: 50%;
+        width: 32px;
+        height: 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        pointer-events: none;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+      }
 
-        .video-indicator i {
-            font-size: 20px;
-        }
+      .thumbnail-container:hover .video-indicator {
+        transform: scale(1.1);
+        background: rgba(220, 53, 69, 0.9);
+      }
 
-        /* Remove scrollbar styles */
-        .code-gallery::-webkit-scrollbar {
-            display: none;
-        }
+      .video-indicator i {
+        font-size: 20px;
+      }
 
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-top: auto;
-            padding-top: 10px;
-            flex-shrink: 0;
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-        }
+      /* Remove scrollbar styles */
+      .code-gallery::-webkit-scrollbar {
+        display: none;
+      }
 
-        .has-project-link .tags {
-            bottom: 60px;
-        }
+      .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: auto;
+        padding-top: 10px;
+        flex-shrink: 0;
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+      }
 
-        .tech-badge {
-            background: rgba(220, 53, 69, 0.2);
-            color: #dc3545;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 0.85rem;
-            border: 1px solid rgba(220, 53, 69, 0.3);
-        }
+      .has-project-link .tags {
+        bottom: 60px;
+      }
 
-        .project-links {
-            position: absolute;
-            bottom: 20px;
-            left: 20px;
-            right: 20px;
-            margin-top: 15px;
-            display: flex;
-            gap: 15px;
-            flex-shrink: 0;
-        }
+      .tech-badge {
+        background: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+        padding: 4px 10px;
+        border-radius: 15px;
+        font-size: 0.85rem;
+        border: 1px solid rgba(220, 53, 69, 0.3);
+        font-weight: bold;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+      }
 
-        .project-links a {
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 0.9rem;
-            transition: color 0.3s ease;
-        }
+      .project-links {
+        position: absolute;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        margin-top: 15px;
+        display: flex;
+        gap: 15px;
+        flex-shrink: 0;
+      }
 
-        .project-links a:hover {
-            color: #dc3545;
-        }
+      .project-links a {
+        color: #fff;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
 
-        :root {
-            --footer-height: 300px;
-        }
+      .project-links a:hover {
+        color: #dc3545;
+      }
 
-        /* Media Modal */
-        .media-modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 1000;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
+      :root {
+        --footer-height: 300px;
+      }
 
-        .media-modal.show {
-            display: flex;
-            opacity: 1;
-        }
+      /* Media Modal */
+      .media-modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.9);
+        z-index: 1000;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
 
-        .media-modal-content {
-            max-width: 90vw;
-            max-height: 90vh;
-            position: relative;
-        }
+      .media-modal.show {
+        display: flex;
+        opacity: 1;
+      }
 
-        .media-modal img,
-        .media-modal video {
-            max-width: 100%;
-            max-height: 90vh;
-            border-radius: 8px;
-        }
+      .media-modal-content {
+        max-width: 90vw;
+        max-height: 90vh;
+        position: relative;
+      }
 
-        .media-modal-close {
-            position: absolute;
-            top: -40px;
-            right: 0;
-            color: white;
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 8px;
-            transition: color 0.2s ease;
-        }
+      .media-modal img,
+      .media-modal video {
+        max-width: 100%;
+        max-height: 90vh;
+        border-radius: 8px;
+      }
 
-        .media-modal-close:hover {
-            color: #dc3545;
-        }
+      .media-modal-close {
+        position: absolute;
+        top: -40px;
+        right: 0;
+        color: white;
+        background: none;
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 8px;
+        transition: color 0.2s ease;
+      }
 
-        /* Navigation Arrows */
-        .modal-nav-arrow {
-            position: fixed;
-            top: 50%;
-            transform: translateY(-50%);
-            color: white;
-            background: rgba(0, 0, 0, 0.5);
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            padding: 20px 15px;
-            transition: color 0.2s ease, background-color 0.2s ease;
-            z-index: 1001;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+      .media-modal-close:hover {
+        color: #dc3545;
+      }
 
-        .modal-nav-arrow:hover {
-            color: #dc3545;
-            background: rgba(0, 0, 0, 0.8);
-        }
+      /* Navigation Arrows */
+      .modal-nav-arrow {
+        position: fixed;
+        top: 50%;
+        transform: translateY(-50%);
+        color: white;
+        background: rgba(0, 0, 0, 0.5);
+        border: none;
+        font-size: 24px;
+        cursor: pointer;
+        padding: 20px 15px;
+        transition: color 0.2s ease, background-color 0.2s ease;
+        z-index: 1001;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
 
-        .modal-nav-prev {
-            left: 20px;
-        }
+      .modal-nav-arrow:hover {
+        color: #dc3545;
+        background: rgba(0, 0, 0, 0.8);
+      }
 
-        .modal-nav-next {
-            right: 20px;
-        }
+      .modal-nav-prev {
+        left: 20px;
+      }
 
-        /* Hide arrows when only one item */
-        .single-item .modal-nav-arrow {
-            display: none;
-        }
+      .modal-nav-next {
+        right: 20px;
+      }
 
-        .media-container {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
+      /* Hide arrows when only one item */
+      .single-item .modal-nav-arrow {
+        display: none;
+      }
 
-        .media-modal img {
-            position: absolute;
-            transform-origin: center;
-            cursor: move;
-            user-select: none;
-            -webkit-user-select: none;
-            max-width: none;
-            max-height: none;
-        }
+      .media-container {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+      }
+
+      .media-modal img {
+        position: absolute;
+        transform-origin: center;
+        cursor: move;
+        user-select: none;
+        -webkit-user-select: none;
+        max-width: none;
+        max-height: none;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <!-- Header -->
     <header class="navbar navbar-expand-lg navbar-dark"></header>
 
     <!-- Content -->
     <div class="content-container">
-        <div class="container">
-            <div class="grid-container">
-                <div class="grid">
-                    <div class="grid-sizer"></div>
-                    <!-- Projects will be loaded dynamically -->
-                </div>
-            </div>
+      <div class="container">
+        <div class="grid-container">
+          <div class="grid">
+            <div class="grid-sizer"></div>
+            <!-- Projects will be loaded dynamically -->
+          </div>
         </div>
+      </div>
     </div>
 
     <!-- Footer -->
     <footer class="footer"></footer>
-    
+
     <!-- Bootstrap and other scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="templates.js"></script>
@@ -370,20 +379,20 @@
     <script src="../projects/code/projects.js"></script>
     <script src="projectLoader.js"></script>
     <script>
-        initializeTemplates();
-        const modal = new MediaModal();
-        
-        // Initialize project loader
-        const loader = new ProjectLoader('code');
-        
-        // Load and render projects
-        loader.loadProjects();
-        loader.renderProjects();
+      initializeTemplates();
+      const modal = new MediaModal();
 
-        // Clean up when navigating away
-        window.addEventListener('unload', () => {
-            loader.cleanup();
-        });
+      // Initialize project loader
+      const loader = new ProjectLoader("code");
+
+      // Load and render projects
+      loader.loadProjects();
+      loader.renderProjects();
+
+      // Clean up when navigating away
+      window.addEventListener("unload", () => {
+        loader.cleanup();
+      });
     </script>
-</body>
-</html> 
+  </body>
+</html>
