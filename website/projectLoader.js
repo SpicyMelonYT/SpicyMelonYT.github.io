@@ -6,9 +6,36 @@ class ProjectLoader {
     this.gridSize = 4; // Number of columns in the grid
     this.baseUnit = 300; // Base size of a 1x1 grid unit in pixels
     this.gap = 20; // Gap between items
+    this.loadingImages = new Map(); // Track loading state of images
+    this.imageObserver = null;
+    this.setupImageObserver();
 
     // Bind methods that will be used as event handlers
     this.handleResize = this.handleResize.bind(this);
+  }
+
+  setupImageObserver() {
+    // Create IntersectionObserver for lazy loading
+    this.imageObserver = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const img = entry.target;
+          const container = img.closest('.thumbnail-container');
+          
+          // Start loading the full image
+          if (img.dataset.src) {
+            img.src = img.dataset.src;
+            delete img.dataset.src;
+          }
+
+          // Stop observing once loaded
+          observer.unobserve(img);
+        }
+      });
+    }, {
+      rootMargin: '50px 0px', // Start loading images 50px before they come into view
+      threshold: 0.1
+    });
   }
 
   loadProjects() {
@@ -64,6 +91,11 @@ class ProjectLoader {
   cleanup() {
     // Remove resize listener when needed (e.g., when navigating away)
     window.removeEventListener("resize", this.handleResize);
+    
+    // Disconnect the observer
+    if (this.imageObserver) {
+      this.imageObserver.disconnect();
+    }
   }
 
   renderProjects() {
@@ -282,16 +314,19 @@ class ProjectLoader {
                     <div class="code-gallery">
                         ${project.thumbnails
                           .map(
-                            (thumbnail) => `
+                            (thumbnail, index) => `
                             <div class="thumbnail-container">
                                 <img 
-                                    src="../projects/art/${thumbnail.image}" 
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
+                                    data-src="../projects/art/${thumbnail.image}" 
                                     alt="${project.title} Thumbnail" 
                                     class="code-thumbnail"
-                                    loading="lazy"
+                                    width="300"
+                                    height="200"
                                     data-media-type="${thumbnail.video ? 'video' : 'image'}"
                                     ${thumbnail.video ? `data-video-src="../projects/art/${thumbnail.video}"` : ''}
                                     ${thumbnail.title ? `data-title="${thumbnail.title}"` : ''}
+                                    style="background: rgba(0,0,0,0.1);"
                                 >
                                 ${thumbnail.video ? `
                                 <div class="video-indicator">
@@ -332,52 +367,11 @@ class ProjectLoader {
             </div>
         `;
 
-    const initializeGallery = () => {
+    // Initialize gallery with requestAnimationFrame for better performance
+    requestAnimationFrame(() => {
       const container = document.querySelector(`#${projectId}`);
-      if (!container) return;
-
-      // Calculate content height
-      const title = container.querySelector(".grid-item-title");
-      const text = container.querySelector(".code-text");
-      const contentTop = title.offsetHeight + text.offsetHeight + 30;
-
-      // Set the custom property
-      container.style.setProperty("--content-top", contentTop + "px");
-
-      const gallery = container.querySelector(".code-gallery");
-      if (!gallery) return;
-
-      const images = Array.from(gallery.querySelectorAll("img"));
-      if (images.length === 0) return;
-
-      // Load all images first
-      Promise.all(
-        images.map((img) => {
-          if (img.complete) return Promise.resolve(img);
-          return new Promise((resolve) => {
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(img);
-          });
-        })
-      ).then((loadedImages) => {
-        const galleryRect = gallery.getBoundingClientRect();
-        const galleryWidth = galleryRect.width;
-        const galleryHeight = galleryRect.height;
-
-        if (galleryWidth <= 0 || galleryHeight <= 0) return;
-
-        // Calculate and apply the layout
-        const layouts = this.calculateFreeformLayout(
-          loadedImages,
-          galleryWidth,
-          galleryHeight
-        );
-        this.applyLayouts(loadedImages, layouts, true); // true indicates initial load
-      });
-    };
-
-    // Single initialization attempt
-    setTimeout(initializeGallery, 50);
+      this.initializeGallery(container, projectId);
+    });
 
     return html;
   }
@@ -390,166 +384,153 @@ class ProjectLoader {
     const GAP = 8;
     const PADDING = GAP / 2;
 
-    // Adjust container dimensions to account for padding
-    const availableWidth = containerWidth - PADDING * 2;
-    const availableHeight = containerHeight - PADDING * 2;
+    // Adjust container dimensions for padding
+    const availableWidth = containerWidth - (PADDING * 2);
+    const availableHeight = containerHeight - (PADDING * 2);
 
-    const imageData = images.map((img) => ({
-      aspectRatio: img.naturalWidth / img.naturalHeight || 1,
-      originalWidth: img.naturalWidth,
-      originalHeight: img.naturalHeight,
+    // Get image data with aspect ratios
+    const imageData = images.map(img => ({
+      aspectRatio: img.naturalWidth / img.naturalHeight || 1.5, // Fallback ratio if image not loaded
+      width: img.naturalWidth,
+      height: img.naturalHeight
     }));
 
     const numImages = images.length;
-    let layouts = [];
 
+    // Single image layout
     if (numImages === 1) {
-      // Single image: fit within container while maintaining aspect ratio
       const img = imageData[0];
-
-      // Calculate dimensions that maintain aspect ratio and fit container
       let width = availableWidth;
       let height = width / img.aspectRatio;
 
-      // If height exceeds container, scale down from height instead
       if (height > availableHeight) {
         height = availableHeight;
         width = height * img.aspectRatio;
       }
 
-      // If width now exceeds container, scale down width
-      if (width > availableWidth) {
-        const scale = availableWidth / width;
-        width *= scale;
-        height *= scale;
-      }
-
-      layouts.push({
+      return [{
         width,
         height,
         x: PADDING + (availableWidth - width) / 2,
-        y: PADDING + (availableHeight - height) / 2,
-      });
-    } else if (numImages === 2) {
-      // Two images: optimize based on their aspect ratios
-      const totalAspectRatio = imageData.reduce(
-        (sum, img) => sum + img.aspectRatio,
-        0
-      );
-      const isWide = availableWidth / availableHeight > totalAspectRatio / 2;
+        y: PADDING + (availableHeight - height) / 2
+      }];
+    }
 
-      if (isWide) {
-        // Side by side
+    // Two images layout
+    if (numImages === 2) {
+      const totalAspectRatio = imageData.reduce((sum, img) => sum + img.aspectRatio, 0);
+      const isHorizontal = availableWidth / availableHeight > totalAspectRatio / 2;
+
+      if (isHorizontal) {
+        // Side by side layout
         const totalWidth = availableWidth - GAP;
         const ratio = imageData[0].aspectRatio / totalAspectRatio;
         const width1 = totalWidth * ratio;
         const width2 = totalWidth - width1;
 
-        const height1 = Math.min(
-          availableHeight,
-          width1 / imageData[0].aspectRatio
-        );
-        const height2 = Math.min(
-          availableHeight,
-          width2 / imageData[1].aspectRatio
-        );
-        const maxHeight = Math.max(height1, height2);
+        const height1 = Math.min(availableHeight, width1 / imageData[0].aspectRatio);
+        const height2 = Math.min(availableHeight, width2 / imageData[1].aspectRatio);
+        const maxHeight = Math.min(availableHeight, Math.max(height1, height2));
 
-        layouts.push({
-          width: width1,
-          height: height1,
-          x: PADDING,
-          y: PADDING + (maxHeight - height1) / 2,
-        });
-
-        layouts.push({
-          width: width2,
-          height: height2,
-          x: PADDING + width1 + GAP,
-          y: PADDING + (maxHeight - height2) / 2,
-        });
+        return [
+          {
+            width: width1,
+            height: height1,
+            x: PADDING,
+            y: PADDING + (maxHeight - height1) / 2
+          },
+          {
+            width: width2,
+            height: height2,
+            x: PADDING + width1 + GAP,
+            y: PADDING + (maxHeight - height2) / 2
+          }
+        ];
       } else {
         // Stacked vertically
         const totalHeight = availableHeight - GAP;
-        const ratio =
-          imageData[0].originalHeight /
-          (imageData[0].originalHeight + imageData[1].originalHeight);
+        const ratio = imageData[0].height / (imageData[0].height + imageData[1].height);
         const height1 = totalHeight * ratio;
         const height2 = totalHeight - height1;
 
-        const width1 = Math.min(
-          availableWidth,
-          height1 * imageData[0].aspectRatio
-        );
-        const width2 = Math.min(
-          availableWidth,
-          height2 * imageData[1].aspectRatio
-        );
+        const width1 = Math.min(availableWidth, height1 * imageData[0].aspectRatio);
+        const width2 = Math.min(availableWidth, height2 * imageData[1].aspectRatio);
 
-        layouts.push({
-          width: width1,
-          height: height1,
-          x: PADDING + (availableWidth - width1) / 2,
-          y: PADDING,
-        });
-
-        layouts.push({
-          width: width2,
-          height: height2,
-          x: PADDING + (availableWidth - width2) / 2,
-          y: PADDING + height1 + GAP,
-        });
+        return [
+          {
+            width: width1,
+            height: height1,
+            x: PADDING + (availableWidth - width1) / 2,
+            y: PADDING
+          },
+          {
+            width: width2,
+            height: height2,
+            x: PADDING + (availableWidth - width2) / 2,
+            y: PADDING + height1 + GAP
+          }
+        ];
       }
-    } else {
-      // Three or more images: use dynamic grid layout
-      const containerRatio = availableWidth / availableHeight;
-      const cols =
-        containerRatio > 1
-          ? Math.ceil(Math.sqrt(numImages * containerRatio))
-          : Math.ceil(Math.sqrt(numImages));
-      const rows = Math.ceil(numImages / cols);
+    }
 
-      // Calculate cell dimensions
-      const cellWidth = (availableWidth - GAP * (cols - 1)) / cols;
-      const cellHeight = (availableHeight - GAP * (rows - 1)) / rows;
+    // Three or more images: optimized grid layout
+    const containerRatio = availableWidth / availableHeight;
+    const cols = containerRatio > 1 
+      ? Math.ceil(Math.sqrt(numImages * containerRatio))
+      : Math.ceil(Math.sqrt(numImages));
+    const rows = Math.ceil(numImages / cols);
 
-      // Create initial grid
-      for (let i = 0; i < numImages; i++) {
-        const row = Math.floor(i / cols);
-        const col = i % cols;
-        const img = imageData[i];
+    // Calculate base cell dimensions
+    const cellWidth = (availableWidth - (GAP * (cols - 1))) / cols;
+    const cellHeight = (availableHeight - (GAP * (rows - 1))) / rows;
 
-        // Calculate dimensions maintaining aspect ratio
-        let width = cellWidth;
-        let height = width / img.aspectRatio;
+    // Create initial grid layout
+    const layouts = imageData.map((img, i) => {
+      const row = Math.floor(i / cols);
+      const col = i % cols;
 
-        if (height > cellHeight) {
-          height = cellHeight;
-          width = height * img.aspectRatio;
-        }
+      // Calculate dimensions maintaining aspect ratio
+      let width = cellWidth;
+      let height = width / img.aspectRatio;
 
-        layouts.push({
-          width,
-          height,
-          x: PADDING + col * (cellWidth + GAP) + (cellWidth - width) / 2,
-          y: PADDING + row * (cellHeight + GAP) + (cellHeight - height) / 2,
-        });
+      if (height > cellHeight) {
+        height = cellHeight;
+        width = height * img.aspectRatio;
       }
 
-      // Optimize last row if it's not full
-      const lastRowStart = Math.floor((numImages - 1) / cols) * cols;
-      const lastRowCount = numImages - lastRowStart;
-      if (lastRowCount < cols) {
-        const lastRowLayouts = layouts.slice(lastRowStart);
-        const totalWidth =
-          lastRowLayouts.reduce((sum, layout) => sum + layout.width, 0) +
-          GAP * (lastRowCount - 1);
-        const scale = Math.min(1, availableWidth / totalWidth);
+      return {
+        width,
+        height,
+        x: PADDING + (col * (cellWidth + GAP)) + ((cellWidth - width) / 2),
+        y: PADDING + (row * (cellHeight + GAP)) + ((cellHeight - height) / 2)
+      };
+    });
 
+    // Optimize last row if it's not full
+    const lastRowStart = Math.floor((numImages - 1) / cols) * cols;
+    const lastRowCount = numImages - lastRowStart;
+
+    if (lastRowCount < cols) {
+      const lastRowLayouts = layouts.slice(lastRowStart);
+      const totalWidth = lastRowLayouts.reduce((sum, layout) => sum + layout.width, 0) 
+        + (GAP * (lastRowCount - 1));
+      
+      // Only scale if the total width is greater than available width
+      if (totalWidth > availableWidth) {
+        const scale = availableWidth / totalWidth;
+        
         let x = PADDING;
-        lastRowLayouts.forEach((layout, i) => {
+        lastRowLayouts.forEach(layout => {
           layout.width *= scale;
           layout.height *= scale;
+          layout.x = x;
+          x += layout.width + GAP;
+        });
+      } else {
+        // Center the last row
+        const offset = (availableWidth - totalWidth) / 2;
+        let x = PADDING + offset;
+        lastRowLayouts.forEach(layout => {
           layout.x = x;
           x += layout.width + GAP;
         });
@@ -579,13 +560,16 @@ class ProjectLoader {
                             (thumbnail) => `
                             <div class="thumbnail-container">
                                 <img 
-                                    src="../projects/code/${thumbnail.image}" 
+                                    src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
+                                    data-src="../projects/code/${thumbnail.image}" 
                                     alt="${project.title} Thumbnail" 
                                     class="code-thumbnail"
-                                    loading="lazy"
+                                    width="300"
+                                    height="200"
                                     data-media-type="${thumbnail.video ? 'video' : 'image'}"
                                     ${thumbnail.video ? `data-video-src="../projects/code/${thumbnail.video}"` : ''}
                                     ${thumbnail.title ? `data-title="${thumbnail.title}"` : ''}
+                                    style="background: rgba(0,0,0,0.1);"
                                 >
                                 ${thumbnail.video ? `
                                 <div class="video-indicator">
@@ -626,52 +610,11 @@ class ProjectLoader {
             </div>
         `;
 
-    const initializeGallery = () => {
+    // Initialize gallery with requestAnimationFrame for better performance
+    requestAnimationFrame(() => {
       const container = document.querySelector(`#${projectId}`);
-      if (!container) return;
-
-      // Calculate content height
-      const title = container.querySelector(".grid-item-title");
-      const text = container.querySelector(".code-text");
-      const contentTop = title.offsetHeight + text.offsetHeight + 30;
-
-      // Set the custom property
-      container.style.setProperty("--content-top", contentTop + "px");
-
-      const gallery = container.querySelector(".code-gallery");
-      if (!gallery) return;
-
-      const images = Array.from(gallery.querySelectorAll("img"));
-      if (images.length === 0) return;
-
-      // Load all images first
-      Promise.all(
-        images.map((img) => {
-          if (img.complete) return Promise.resolve(img);
-          return new Promise((resolve) => {
-            img.onload = () => resolve(img);
-            img.onerror = () => resolve(img);
-          });
-        })
-      ).then((loadedImages) => {
-        const galleryRect = gallery.getBoundingClientRect();
-        const galleryWidth = galleryRect.width;
-        const galleryHeight = galleryRect.height;
-
-        if (galleryWidth <= 0 || galleryHeight <= 0) return;
-
-        // Calculate and apply the layout
-        const layouts = this.calculateFreeformLayout(
-          loadedImages,
-          galleryWidth,
-          galleryHeight
-        );
-        this.applyLayouts(loadedImages, layouts, true); // true indicates initial load
-      });
-    };
-
-    // Single initialization attempt
-    setTimeout(initializeGallery, 50);
+      this.initializeGallery(container, projectId);
+    });
 
     return html;
   }
@@ -709,5 +652,107 @@ class ProjectLoader {
         });
       }
     });
+  }
+
+  initializeGallery(container, projectId) {
+    if (!container) return;
+
+    // Calculate content height
+    const title = container.querySelector(".grid-item-title");
+    const text = container.querySelector(".code-text");
+    const contentTop = title.offsetHeight + text.offsetHeight + 30;
+
+    // Set the custom property
+    container.style.setProperty("--content-top", contentTop + "px");
+
+    const gallery = container.querySelector(".code-gallery");
+    if (!gallery) return;
+
+    const images = Array.from(gallery.querySelectorAll("img"));
+    if (images.length === 0) return;
+
+    // Get gallery dimensions
+    const galleryRect = gallery.getBoundingClientRect();
+    const galleryWidth = galleryRect.width;
+    const galleryHeight = galleryRect.height;
+
+    if (galleryWidth <= 0 || galleryHeight <= 0) return;
+
+    // Apply initial placeholder layout
+    const placeholderLayouts = this.calculatePlaceholderLayout(
+      images.length,
+      galleryWidth,
+      galleryHeight
+    );
+    this.applyLayouts(images, placeholderLayouts, true);
+
+    // Start observing images for lazy loading
+    images.forEach(img => {
+      if (img.dataset.src) {
+        this.imageObserver.observe(img);
+      }
+    });
+
+    // Set up layout recalculation for when images load
+    let loadedCount = 0;
+    const totalImages = images.length;
+
+    images.forEach((img, index) => {
+      const uniqueId = `${projectId}-${index}`;
+      if (this.loadingImages.has(uniqueId)) return;
+
+      this.loadingImages.set(uniqueId, true);
+
+      const handleLoad = () => {
+        this.loadingImages.delete(uniqueId);
+        loadedCount++;
+
+        // Only recalculate layout when all images are loaded
+        if (loadedCount === totalImages) {
+          requestAnimationFrame(() => {
+            const layouts = this.calculateFreeformLayout(
+              images,
+              galleryWidth,
+              galleryHeight
+            );
+            this.applyLayouts(images, layouts, false);
+          });
+        }
+      };
+
+      if (img.complete) {
+        handleLoad();
+      } else {
+        img.addEventListener('load', handleLoad, { once: true });
+        img.addEventListener('error', handleLoad, { once: true });
+      }
+    });
+  }
+
+  calculatePlaceholderLayout(count, containerWidth, containerHeight) {
+    const layouts = [];
+    const GAP = 8;
+    const PADDING = GAP / 2;
+    
+    // Use a simple grid layout for placeholders
+    const cols = count <= 2 ? 1 : 2;
+    const rows = Math.ceil(count / cols);
+    
+    const cellWidth = (containerWidth - (cols + 1) * GAP) / cols;
+    const cellHeight = (containerHeight - (rows + 1) * GAP) / rows;
+    
+    for (let i = 0; i < count; i++) {
+      const row = Math.floor(i / cols);
+      const col = i % cols;
+      
+      layouts.push({
+        width: cellWidth,
+        height: cellHeight,
+        x: PADDING + col * (cellWidth + GAP),
+        y: PADDING + row * (cellHeight + GAP)
+      });
+    }
+    
+    return layouts;
   }
 }
