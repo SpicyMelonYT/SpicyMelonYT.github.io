@@ -214,6 +214,7 @@ const ART_PROJECTS = {
       thumbnails: [
         {
           image: "still_life/food_and_gun.png",
+          video: "still_life/food_and_gun.mp4",
         },
         {
           image: "still_life/fruit_bowl.png",
