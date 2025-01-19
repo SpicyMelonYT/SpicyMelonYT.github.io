@@ -71,7 +71,10 @@ const ART_PROJECTS = {
       description:
         "I primarily focus on 3D art but sometimes I just play around in photoshop and see what I can make!<br><br>Currently only have one of them cause of a hardrive thing, gotta unpack some recently semi corrupted backups. In do time!",
       size: { width: 1, height: 2 },
-      thumbnails: [{ image: "photoshop_art/top_hat_suit_art.png" }],
+      thumbnails: [
+        { image: "photoshop_art/top_hat_suit_art.png" },
+        { image: "photoshop_art/pfp_for_zoom.jpg", title: "Profile Picture for Zoom" },
+      ],
       links: [],
       date: "",
       tags: ["Photoshop"],

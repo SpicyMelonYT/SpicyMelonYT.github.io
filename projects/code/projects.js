@@ -1,6 +1,34 @@
 const CODE_PROJECTS = {
-  order: ["chatollama", "chatollamaagent", "from_within", "shinra_saito"],
+  order: ["chatollamaagent", "chatollama", "shinra_saito", "from_within"],
   data: {
+    chatollamaagent: {
+      title: "Chat Ollama Agent",
+      description:
+        "A visual node-based programming system for creating and managing chat-based workflows. Design your chat flows visually, connect nodes to create logic, and execute the networks with the built-in runner.",
+      size: { width: 2, height: 3 },
+      thumbnails: [
+        {
+          image: "chatollamaagent/interface-overview.png",
+        },
+        {
+          image: "chatollamaagent/interface-console.png",
+        },
+      ],
+      links: [
+        {
+          text: "PyPI Package",
+          url: "https://pypi.org/project/chatollamaagent/",
+          icon: "box-seam",
+        },
+        {
+          text: "Github",
+          url: "https://github.com/SpicyMelonYT/ChatOllamaAgent",
+          icon: "github",
+        },
+      ],
+      date: "First Release: Jan 3, 2025 - Last Release: Jan 8, 2025",
+      tags: ["Python", "Ollama", "Agentic AI", "Node-based"],
+    },
     chatollama: {
       title: "Chat Ollama",
       description:
@@ -20,31 +48,6 @@ const CODE_PROJECTS = {
       ],
       date: "First Release: Sep 5, 2024 - Last Release: Jan 3, 2025",
       tags: ["Python", "Ollama", "Conversational AI"],
-    },
-    chatollamaagent: {
-      title: "Chat Ollama Agent",
-      description:
-        "A visual node-based programming system for creating and managing chat-based workflows. Design your chat flows visually, connect nodes to create logic, and execute the networks with the built-in runner.",
-      size: { width: 2, height: 2 },
-      thumbnails: [
-        {
-          image: "chatollamaagent/interface-overview.png",
-        },
-      ],
-      links: [
-        {
-          text: "PyPI Package",
-          url: "https://pypi.org/project/chatollamaagent/",
-          icon: "box-seam",
-        },
-        {
-          text: "Github",
-          url: "https://github.com/SpicyMelonYT/ChatOllamaAgent",
-          icon: "github",
-        },
-      ],
-      date: "First Release: Jan 3, 2025 - Last Release: Jan 8, 2025",
-      tags: ["Python", "Ollama", "Agentic AI", "Node-based"],
     },
     from_within: {
       title: "From Within",
@@ -92,7 +95,7 @@ const CODE_PROJECTS = {
       title: "Shinra Saito",
       description:
         "A high movement 3D platformer game inspired by Hanzo from Overwatch and the game Getting Over It with Bennett Foddy. I did all the programming for this game.",
-      size: { width: 2, height: 2 },
+      size: { width: 2, height: 3 },
       thumbnails: [
         {
           image: "shinra_saito/starting_game.jpg",
