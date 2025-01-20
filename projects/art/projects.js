@@ -69,7 +69,7 @@ const ART_PROJECTS = {
     photoshop_art: {
       title: "Photoshop Art",
       description:
-        "I primarily focus on 3D art but sometimes I just play around in photoshop and see what I can make!<br><br>Currently only have one of them cause of a hardrive thing, gotta unpack some recently semi corrupted backups. In do time!",
+        "I primarily focus on 3D art but sometimes I just play around in photoshop and see what I can make!",
       size: { width: 1, height: 2 },
       thumbnails: [
         { image: "photoshop_art/top_hat_suit_art.png" },
