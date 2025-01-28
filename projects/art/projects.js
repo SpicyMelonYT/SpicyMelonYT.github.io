@@ -242,6 +242,10 @@ const ART_PROJECTS = {
           image: "music/melody_beats.png",
           video: "music/melody_beats.mp4",
         },
+        {
+          image: "music/take_5_remix.png",
+          video: "music/take_5_remix.mp4",
+        },
       ],
       links: [],
       date: "",
