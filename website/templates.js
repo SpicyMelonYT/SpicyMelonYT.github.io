@@ -23,6 +23,9 @@ const templates = {
                     <li class="nav-item">
                         <a class="nav-link" href="reel.html">Reel</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="career.html">Career</a>
+                    </li>
                 </ul>
             </div>
         </div>
