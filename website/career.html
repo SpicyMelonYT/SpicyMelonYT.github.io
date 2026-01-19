@@ -97,17 +97,271 @@
             opacity: 1;
         }
 
+        /* ===== PAGE 1 LAYOUT ===== */
+
+        /* Header Layout */
+        .resume-header.page-1-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .name-block {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .name-block .name {
+            font-size: 2.5rem !important;
+            font-weight: 300 !important;
+            margin-bottom: 0.5rem !important;
+            background: linear-gradient(45deg, #dc3545, #ff6b6b) !important;
+            -webkit-background-clip: text !important;
+            -webkit-text-fill-color: transparent !important;
+            background-clip: text !important;
+            color: #ff6b6b !important; /* Fallback */
+        }
+
+        .name-block .title {
+            font-size: 1.2rem !important;
+            color: #ff6b6b !important;
+            margin-bottom: 1rem !important;
+            font-weight: 500 !important;
+        }
+
+        .logo-mark {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 3px solid #dc3545;
+        }
+
+        .logo-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Body Layout - Two Column Grid */
+        .resume-body {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        /* Left Column */
+        .left-column {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .left-column .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .left-column .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .left-column .skills,
+        .left-column .education {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .skill-group {
+            margin-bottom: 20px;
+        }
+
+        .left-column h3,
+        .skill-group h4 {
+            color: #dc3545 !important;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #dc3545;
+            padding-bottom: 4px;
+        }
+
+        .skill-group ul {
+            margin: 0;
+            padding-left: 16px;
+        }
+
+        .skill-group li {
+            margin-bottom: 4px;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .education-item {
+            margin-bottom: 20px;
+        }
+
+        .education-item h4 {
+            margin-bottom: 6px;
+            font-size: 0.95rem;
+            color: white;
+        }
+
+        .education-item span {
+            display: block;
+            margin-top: 2px;
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* Right Column */
+        .right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .right-column .profile h3 {
+            color: #dc3545 !important;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #dc3545;
+            padding-bottom: 4px;
+        }
+
+        .right-column .profile {
+            margin-bottom: 0;
+        }
+
+        .right-column .profile p {
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .links {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .link-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+
+        .link-item i {
+            color: #dc3545;
+            font-size: 1rem;
+        }
+
+        .work-experience h3 {
+            color: #dc3545 !important;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #dc3545;
+            padding-bottom: 4px;
+        }
+
+        .work-experience .job,
+        .internship .job {
+            margin-bottom: 24px;
+        }
+
+        .job-header {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-bottom: 12px;
+        }
+
+        .job-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: white;
+        }
+
+        .job-header .company {
+            font-weight: 500;
+            color: #dc3545;
+            font-size: 0.9rem;
+        }
+
+        .job-header .date {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .job ul,
+        .internship ul {
+            margin: 0;
+            padding-left: 18px;
+        }
+
+        .job li,
+        .internship li {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.95);
+        }
+
+        .internship h3 {
+            color: #dc3545 !important;
+            margin-bottom: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #dc3545;
+            padding-bottom: 4px;
+        }
+
+        /* Page 1 specific header override */
+        .page-1 .resume-header {
+            display: flex !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            margin-bottom: 40px !important;
+            background: transparent !important;
+            border: none !important;
+            box-shadow: none !important;
+            padding: 0 !important;
+        }
+
         /* Link styling */
         .page-footer a,
-        .contact-item a {
-            color:rgb(255, 119, 139) !important; /* Desaturated red */
+        .contact-item a,
+        .link-item a {
+            color: #cc6b7a !important; /* Desaturated red */
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .page-footer a:hover,
-        .contact-item a:hover {
-            color: rgb(255, 157, 172) !important; /* Brighter red on hover */
+        .contact-item a:hover,
+        .link-item a:hover {
+            color: #ff6b6b !important; /* Brighter red on hover */
             text-decoration: underline;
         }
 
@@ -162,47 +416,148 @@
                 <div class="resume-page page-1">
                     <div class="page-content">
                         <!-- Header Section -->
-                        <header class="resume-header">
-                            <h1 class="name">Matthew Sanchez</h1>
-                            <p class="title">Asset Artist and Software Developer</p>
-                            <div class="contact-info">
-                                <div class="contact-item">
-                                    <i class="bi bi-envelope-fill"></i>
-                                    <span>MatthewSanchezArt@gmail.com</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="bi bi-telephone"></i>
-                                    <span>+818-631-6990</span>
-                                </div>
-                                <div class="contact-item">
-                                    <i class="bi bi-geo-alt"></i>
-                                    <span>California</span>
-                                </div>
+                        <header class="resume-header page-1-header">
+                            <div class="name-block">
+                                <h1 class="name">Matthew Sanchez</h1>
+                                <p class="title">Asset Artist and Software Developer</p>
+                            </div>
+                            <div class="logo-mark">
+                                <img src="SpicyMelonLogo.png" alt="MS" class="logo-image">
                             </div>
                         </header>
 
-                        <!-- Professional Summary -->
-                        <section class="summary">
-                            <h2>Professional Summary</h2>
-                            <p>
-                                Experienced Asset Artist and Developer skilled in creating optimized 3D assets for
-                                high-impact projects in feature films, games, and previs/postvis pipelines.
-                                Proficient in almost all aspects of Maya, Blender, Unreal, and Unity, with expertise in
-                                modeling, rigging, and texturing. Adept in Python, C#, C++, and JavaScript, bringing
-                                a robust programming background to streamline workflows and enhance asset
-                                creation. Contributed to 11 feature films and a TV series, with hands-on experience
-                                in AI and a track record of leading technical solutions to support creative and
-                                technical goals. Reliable, resourceful, and highly collaborative, with a commitment
-                                to delivering quality results across diverse projects.
-                            </p>
-                        </section>
+                        <!-- Body Layout -->
+                        <div class="resume-body">
+                            <!-- LEFT COLUMN -->
+                            <aside class="left-column">
+                                <section class="contact-info">
+                                    <div class="contact-item">
+                                        <i class="bi bi-telephone"></i>
+                                        <span>+818-631-6990</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="bi bi-envelope-fill"></i>
+                                        <span>MatthewSanchezArt@gmail.com</span>
+                                    </div>
+                                    <div class="contact-item">
+                                        <i class="bi bi-geo-alt"></i>
+                                        <span>California</span>
+                                    </div>
+                                </section>
 
-                        <!-- Profile Image -->
-                        <div class="profile-section">
-                            <img src="SpicyMelonLogo.png" alt="Profile" class="profile-image">
-                            <p class="image-caption">
-                                Creative professional specializing in 3D asset creation, game development, and visual effects.
-                            </p>
+                                <section class="skills">
+                                    <h3>Skills</h3>
+
+                                    <div class="skill-group">
+                                        <h4>3D and Game Development</h4>
+                                        <ul>
+                                            <li>Unreal Engine: Animation, Rigging, Niagara</li>
+                                            <li>Unity Engine: Scripting, Optimization</li>
+                                            <li>Maya/Blender: Modeling, Rigging, Texturing</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="skill-group">
+                                        <h4>Adobe Suite</h4>
+                                        <ul>
+                                            <li>Photoshop</li>
+                                            <li>After Effects</li>
+                                            <li>Premiere Pro</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="skill-group">
+                                        <h4>Programming</h4>
+                                        <ul>
+                                            <li>Python, C#, C++, JavaScript</li>
+                                            <li>HTML, CSS</li>
+                                        </ul>
+                                    </div>
+                                </section>
+
+                                <section class="education">
+                                    <h3>Education</h3>
+
+                                    <div class="education-item">
+                                        <h4>California State University, Northridge</h4>
+                                        <span>Bachelor of Arts</span>
+                                        <span>Transferred from Los Angeles Valley College</span>
+                                    </div>
+
+                                    <div class="education-item">
+                                        <h4>John Burroughs High School</h4>
+                                        <span>Burbank, CA</span>
+                                        <span>High School Diploma</span>
+                                    </div>
+                                </section>
+                            </aside>
+
+                            <!-- RIGHT COLUMN -->
+                            <main class="right-column">
+                                <section class="profile">
+                                    <h3>Profile</h3>
+                                    <p>
+                                        Experienced Asset Artist and Developer skilled in creating optimized
+                                        3D assets for high-impact projects in feature films, games, and
+                                        previs/postvis pipelines.
+                                    </p>
+                                    <p>
+                                        Proficient in Maya, Blender, Unreal, and Unity with a strong programming
+                                        background in Python, C#, C++, and JavaScript. Contributed to 11 feature
+                                        films and a TV series.
+                                    </p>
+                                </section>
+
+                                <section class="links">
+                                    <div class="link-item">
+                                        <i class="bi bi-linkedin"></i>
+                                        <a href="https://www.linkedin.com/in/matthew-sanchez-3a083a19b/" target="_blank">LinkedIn</a>
+                                    </div>
+                                    <div class="link-item">
+                                        <i class="bi bi-images"></i>
+                                        <a href="https://spicymelon-yt.wixsite.com/website/art-media-projects" target="_blank">Portfolio</a>
+                                    </div>
+                                    <div class="link-item">
+                                        <i class="bi bi-globe"></i>
+                                        <a href="https://spicymelonyt.github.io" target="_blank">Website</a>
+                                    </div>
+                                    <div class="link-item">
+                                        <i class="bi bi-youtube"></i>
+                                        <a href="https://www.youtube.com/@SpicyMelonYT" target="_blank">YouTube</a>
+                                    </div>
+                                </section>
+
+                                <section class="work-experience">
+                                    <h3>Work Experience</h3>
+
+                                    <div class="job">
+                                        <div class="job-header">
+                                            <h4>Previs Asset Artist</h4>
+                                            <span class="company">Day For Nite | Los Angeles, CA</span>
+                                            <span class="date">July 2023 – Present</span>
+                                        </div>
+                                        <ul>
+                                            <li>Created and optimized high-quality 3D assets for feature films and TV projects</li>
+                                            <li>Developed Python tools for Maya, Blender, and Unreal Engine</li>
+                                            <li>Collaborated with directors and senior team members</li>
+                                            <li>Adapted assets dynamically to evolving project requirements</li>
+                                        </ul>
+                                    </div>
+                                </section>
+
+                                <section class="internship">
+                                    <h3>Internship Student</h3>
+                                    <div class="job-header">
+                                        <span class="company">Day For Nite | Los Angeles, CA</span>
+                                        <span class="date">6 Week Program</span>
+                                    </div>
+                                    <ul>
+                                        <li>Trained extensively in the postvis pipeline</li>
+                                        <li>Assisted with compositing and tracking in After Effects</li>
+                                        <li>Learned industry best practices and standards</li>
+                                    </ul>
+                                </section>
+                            </main>
                         </div>
 
                         <!-- Page 1 Footer -->
@@ -702,9 +1057,32 @@
         color: #666 !important;
     }
 
+    /* Print layout adjustments for new structure */
+    .resume-body {
+        display: block !important;
+    }
+
+    .left-column,
+    .right-column {
+        display: block !important;
+        margin-bottom: 20px !important;
+    }
+
+    .links {
+        display: block !important;
+        margin-bottom: 20px !important;
+    }
+
+    .link-item {
+        display: inline-block !important;
+        margin-right: 15px !important;
+        margin-bottom: 5px !important;
+    }
+
     /* Print link styling */
     .page-footer a,
-    .contact-item a {
+    .contact-item a,
+    .link-item a {
         color: #666 !important;
         text-decoration: underline !important;
     }
