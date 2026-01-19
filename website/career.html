@@ -215,6 +215,15 @@ body.career-page header:first-of-type {
             opacity: 1;
         }
 
+        /* PDF mode - override transparent backgrounds */
+        .resume-page.pdf-mode {
+            background: #111111 !important;
+            border: none !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+            backdrop-filter: none !important;
+        }
+
         /* ===== PAGE 2 SECTIONS ===== */
 
         /* Work Details Section */
@@ -1012,6 +1021,12 @@ body.career-page header:first-of-type {
         document.getElementById('downloadResume').addEventListener('click', function (e) {
             e.preventDefault();
 
+            // Apply PDF-specific styles to fix background transparency
+            const resumePages = document.querySelectorAll('.resume-page');
+            resumePages.forEach(page => {
+                page.classList.add('pdf-mode');
+            });
+
             // Configure html2pdf options
             const options = {
                 margin: 0,
@@ -1022,10 +1037,10 @@ body.career-page header:first-of-type {
                     useCORS: true,
                     allowTaint: true,
                     foreignObjectRendering: true,
-                    scrollX: 0,
+                    scrollX: -202,
                     scrollY: 0,
-                    windowWidth: document.getElementById('resume-container').scrollWidth,
-                    x: 0
+                    width: document.getElementById('resume-container').offsetWidth,
+                    height: document.getElementById('resume-container').offsetHeight
                 },
                 jsPDF: {
                     unit: 'in',
@@ -1037,16 +1052,29 @@ body.career-page header:first-of-type {
 
             // Ensure all pages are visible and reset any offsets
             const element = document.getElementById('resume-container');
-            
-            // Generate and download PDF
-            html2pdf()
-                .set(options)
-                .from(element)
-                .save()
-                .catch(err => {
-                    console.error('PDF generation failed:', err);
-                    alert('PDF generation failed. Please try again.');
-                });
+
+            // Small delay to ensure styles are applied
+            setTimeout(() => {
+                // Generate and download PDF
+                html2pdf()
+                    .set(options)
+                    .from(element)
+                    .save()
+                    .then(() => {
+                        // Remove PDF mode class after generation
+                        resumePages.forEach(page => {
+                            page.classList.remove('pdf-mode');
+                        });
+                    })
+                    .catch(err => {
+                        console.error('PDF generation failed:', err);
+                        alert('PDF generation failed. Please try again.');
+                        // Remove PDF mode class on error too
+                        resumePages.forEach(page => {
+                            page.classList.remove('pdf-mode');
+                        });
+                    });
+            }, 100);
         });
 
         // Load resume when page loads
