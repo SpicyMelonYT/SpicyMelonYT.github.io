@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -77,7 +78,8 @@
         }
 
         /* Resume loading and error states */
-        .loading-message, .error-message {
+        .loading-message,
+        .error-message {
             text-align: center;
             padding: 3rem;
             color: rgba(255, 255, 255, 0.7);
@@ -95,6 +97,53 @@
 
         .resume-page.loaded {
             opacity: 1;
+        }
+
+        /* ===== PAGE 2 SECTIONS ===== */
+
+        /* Work Details Section */
+        .work-details {
+            margin-top: 2rem;
+        }
+
+        .work-details h2 {
+            color: #dc3545;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border-bottom: 2px solid rgba(220, 53, 69, 0.3);
+            padding-bottom: 0.5rem;
+        }
+
+        .work-details .job {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .work-details .job:last-child {
+            border-bottom: none;
+        }
+
+        .work-details .job-header {
+            margin-bottom: 1rem;
+        }
+
+        .work-details .job-header h3 {
+            color: white;
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .work-details .job ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+
+        .work-details .job li {
+            margin-bottom: 0.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
         }
 
         /* ===== PAGE 1 LAYOUT ===== */
@@ -121,7 +170,8 @@
             -webkit-background-clip: text !important;
             -webkit-text-fill-color: transparent !important;
             background-clip: text !important;
-            color: #ff6b6b !important; /* Fallback */
+            color: #ff6b6b !important;
+            /* Fallback */
         }
 
         .name-block .title {
@@ -343,7 +393,6 @@
             justify-content: space-between !important;
             align-items: center !important;
             margin-bottom: 40px !important;
-            background: transparent !important;
             border: none !important;
             box-shadow: none !important;
             padding: 0 !important;
@@ -353,7 +402,8 @@
         .page-footer a,
         .contact-item a,
         .link-item a {
-            color: #cc6b7a !important; /* Desaturated red */
+            color: #cc6b7a !important;
+            /* Desaturated red */
             text-decoration: none;
             transition: color 0.3s ease;
         }
@@ -361,7 +411,8 @@
         .page-footer a:hover,
         .contact-item a:hover,
         .link-item a:hover {
-            color: #ff6b6b !important; /* Brighter red on hover */
+            color: #ff6b6b !important;
+            /* Brighter red on hover */
             text-decoration: underline;
         }
 
@@ -370,9 +421,14 @@
             .resume-container {
                 padding: 0 1rem;
             }
+
+            .work-details h2 {
+                font-size: 1.3rem;
+            }
         }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <header class="navbar navbar-expand-lg navbar-dark"></header>
@@ -527,36 +583,6 @@
                                     </div>
                                 </section>
 
-                                <section class="work-experience">
-                                    <h3>Work Experience</h3>
-
-                                    <div class="job">
-                                        <div class="job-header">
-                                            <h4>Previs Asset Artist</h4>
-                                            <span class="company">Day For Nite | Los Angeles, CA</span>
-                                            <span class="date">July 2023 – Present</span>
-                                        </div>
-                                        <ul>
-                                            <li>Created and optimized high-quality 3D assets for feature films and TV projects</li>
-                                            <li>Developed Python tools for Maya, Blender, and Unreal Engine</li>
-                                            <li>Collaborated with directors and senior team members</li>
-                                            <li>Adapted assets dynamically to evolving project requirements</li>
-                                        </ul>
-                                    </div>
-                                </section>
-
-                                <section class="internship">
-                                    <h3>Internship Student</h3>
-                                    <div class="job-header">
-                                        <span class="company">Day For Nite | Los Angeles, CA</span>
-                                        <span class="date">6 Week Program</span>
-                                    </div>
-                                    <ul>
-                                        <li>Trained extensively in the postvis pipeline</li>
-                                        <li>Assisted with compositing and tracking in After Effects</li>
-                                        <li>Learned industry best practices and standards</li>
-                                    </ul>
-                                </section>
                             </main>
                         </div>
 
@@ -570,15 +596,31 @@
                 <!-- Page 2 Container -->
                 <div class="resume-page page-2">
                     <div class="page-content">
-                        <!-- Experience Section -->
-                        <section class="experience">
-                            <h2>Professional Experience</h2>
+
+                        <!-- Work Experience Details -->
+                        <section class="work-details">
+                            <h2>Work Experience</h2>
 
                             <div class="job">
-                                <h3>Previs Asset Artist</h3>
-                                <div class="job-meta">
-                                    <span class="company">Day For Nite</span>
-                                    <span class="dates">Los Angeles, CA | July 2023 - Present</span>
+                                <div class="job-header">
+                                    <h3>Revolt - AI App Creation Platform</h3>
+                                    <span class="company">Personal Project | rvt.dev</span>
+                                    <span class="date">November 2025 – Present</span>
+                                </div>
+                                <ul>
+                                    <li>Developed Revolt, a comprehensive web platform for creating browser-based, desktop, and website applications directly in the browser</li>
+                                    <li>Implemented full-featured development environment allowing users to edit code, utilize AI for code editing and actions, preview applications, and share creations</li>
+                                    <li>Built team collaboration features enabling users to build teams and work together on projects</li>
+                                    <li>Created a public platform accessible at rvt.dev for users to create, share, and discover applications</li>
+                                    <li>Currently in active development with ongoing feature enhancements and user experience improvements</li>
+                                </ul>
+                            </div>
+
+                            <div class="job">
+                                <div class="job-header">
+                                    <h3>Previs Asset Artist</h3>
+                                    <span class="company">Day For Nite | Los Angeles, CA</span>
+                                    <span class="date">July 2023 – Present</span>
                                 </div>
                                 <ul>
                                     <li>Created and optimized hundreds of high-quality 3D assets for previs and postvis pipelines, dedicating extensive hours to ensure all models met strict creative and technical standards for feature films and TV projects.</li>
@@ -590,10 +632,10 @@
                             </div>
 
                             <div class="job">
-                                <h3>Internship Student</h3>
-                                <div class="job-meta">
-                                    <span class="company">Day For Nite</span>
-                                    <span class="dates">Los Angeles, CA | 6 Week Program</span>
+                                <div class="job-header">
+                                    <h3>Internship Student</h3>
+                                    <span class="company">Day For Nite | Los Angeles, CA</span>
+                                    <span class="date">6 Week Program</span>
                                 </div>
                                 <ul>
                                     <li>Trained extensively in the postvis pipeline, learning to interpret shot and scene codes, set up cameras in Maya, and choreograph scenes by importing assets created by the asset team. Contributed to both previs and postvis workflows, gaining foundational skills in visual storytelling.</li>
@@ -604,6 +646,16 @@
                             </div>
                         </section>
 
+                        <!-- Page 2 Footer -->
+                        <footer class="page-footer">
+                            <p>For more examples of my work, visit my portfolio at <a href="https://spicymelonyt.github.io" target="_blank">https://spicymelonyt.github.io</a></p>
+                        </footer>
+                    </div>
+                </div>
+
+                <!-- Page 3 Container -->
+                <div class="resume-page page-3">
+                    <div class="page-content">
                         <!-- Skills Table -->
                         <section class="skills">
                             <h2>Technical Skills</h2>
@@ -634,17 +686,7 @@
                                 </tbody>
                             </table>
                         </section>
-
-                        <!-- Page 2 Footer -->
-                        <footer class="page-footer">
-                            <p>For more examples of my work, visit my portfolio at <a href="https://spicymelonyt.github.io" target="_blank">https://spicymelonyt.github.io</a></p>
-                        </footer>
-                    </div>
-                </div>
-
-                <!-- Page 3 Container -->
-                <div class="resume-page page-3">
-                    <div class="page-content">
+                
                         <!-- Education -->
                         <section class="education">
                             <h2>Education</h2>
@@ -711,7 +753,7 @@
         }
 
         // Handle resume download
-        document.getElementById('downloadResume').addEventListener('click', function(e) {
+        document.getElementById('downloadResume').addEventListener('click', function (e) {
             e.preventDefault();
 
             // Create a new window with the resume content and print styles
@@ -1079,6 +1121,20 @@
         margin-bottom: 5px !important;
     }
 
+    /* Work details print styles */
+    .work-details h2 {
+        color: black !important;
+        border-color: #ccc !important;
+    }
+
+    .work-details .job-header h3 {
+        color: black !important;
+    }
+
+    .work-details .job li {
+        color: black !important;
+    }
+
     /* Print link styling */
     .page-footer a,
     .contact-item a,
@@ -1100,7 +1156,7 @@
             resumeWindow.document.close();
 
             // Wait for the window to load, then trigger print
-            resumeWindow.onload = function() {
+            resumeWindow.onload = function () {
                 setTimeout(() => {
                     resumeWindow.print();
                 }, 500); // Small delay to ensure styles are loaded
@@ -1108,9 +1164,10 @@
         });
 
         // Load resume when page loads
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadResume();
         });
     </script>
 </body>
+
 </html>

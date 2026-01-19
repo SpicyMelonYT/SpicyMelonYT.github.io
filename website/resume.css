@@ -14,6 +14,7 @@ body {
 @media screen {
     .resume-page {
         margin-bottom: 3rem;
+        background: rgba(0, 0, 0, 0.5);
         border-radius: 15px;
         padding: 2rem;
         backdrop-filter: blur(10px);
@@ -85,7 +86,6 @@ body {
 .resume-header {
     text-align: center;
     margin-bottom: 2rem;
-    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
     padding: 0 !important;
@@ -94,7 +94,6 @@ body {
 }
 
 .resume-header * {
-    background: transparent !important;
     border: none !important;
     box-shadow: none !important;
 }
@@ -124,7 +123,6 @@ body {
     align-items: center;
     gap: 0.8rem;
     margin-bottom: 1rem;
-    background: transparent !important;
     border: none !important;
 }
 
