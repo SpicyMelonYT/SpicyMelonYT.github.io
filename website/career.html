@@ -32,10 +32,11 @@
 
         .content-container {
             grid-area: content;
-            padding: 3rem 0;
+            padding: 5rem 0 3rem 0; /* Extra top padding for download button */
             display: flex;
             flex-direction: column;
             align-items: center;
+            position: relative; /* For absolute positioning context */
         }
 
         .resume-container {
@@ -45,6 +46,41 @@
             padding: 0 2rem;
         }
 
+        .download-section-top {
+            position: absolute;
+            top: 120px; /* Below header */
+            right: 2rem;
+            z-index: 10;
+        }
+
+        .download-btn-small {
+            background: linear-gradient(45deg, #dc3545, #ff6b6b);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+            font-size: 0.9rem;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+        }
+
+        .download-btn-small:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.4);
+            color: white;
+            text-decoration: none;
+        }
+
+        .download-btn-small i {
+            font-size: 0.9rem;
+        }
+
+        /* Original centered download button (kept for reference) */
         .download-section {
             text-align: center;
             margin-bottom: 3rem;
@@ -485,6 +521,17 @@
                 padding: 0 1rem;
             }
 
+            .download-section-top {
+                position: static;
+                text-align: center;
+                margin-bottom: 2rem;
+                margin-top: 1rem;
+            }
+
+            .content-container {
+                padding: 3rem 0;
+            }
+
             .work-details h2 {
                 font-size: 1.3rem;
             }
@@ -507,16 +554,15 @@
 
     <!-- Content -->
     <div class="content-container">
-        <div class="resume-container">
-            <!-- Download Section -->
-            <div class="download-section">
-                <a href="#" class="download-btn" id="downloadResume">
-                    <i class="bi bi-download"></i>
-                    Download Resume (PDF)
-                </a>
-                <p class="text-light mt-2 small">For applications requiring a downloadable resume</p>
-            </div>
+        <!-- Download Button - Top Right -->
+        <div class="download-section-top">
+            <a href="#" class="download-btn-small" id="downloadResume">
+                <i class="bi bi-download"></i>
+                Download PDF
+            </a>
+        </div>
 
+        <div class="resume-container">
             <!-- Resume Content -->
             <div id="resume-container">
                 <!-- Resume content will be loaded here -->
@@ -679,11 +725,11 @@
                                         <img src="revoltLogo.png" alt="Revolt Logo" class="job-logo">
                                         <h3>Revolt - AI App Creation Platform</h3>
                                     </div>
-                                    <span class="company">Co-Owner & Sole Developer | rvt.dev</span>
+                                    <span class="company">Co-Owner & Senior Developer | rvt.dev</span>
                                     <span class="date">November 2025 - Present</span>
                                 </div>
                                 <ul>
-                                    <li>Serving as co-owner and sole developer of Revolt, a comprehensive web platform for creating browser-based, desktop, and website applications directly in the browser</li>
+                                    <li>Serving as co-owner and senior developer of Revolt, a comprehensive web platform for creating browser-based, desktop, and website applications directly in the browser</li>
                                     <li>Implemented full-featured development environment allowing users to edit code, utilize AI for code editing and actions, preview applications, and share creations</li>
                                     <li>Built team collaboration features enabling users to build teams and work together on projects</li>
                                     <li>Created a public platform accessible at <a href="https://rvt.dev" target="_blank" class="career-link-2">rvt.dev</a> <span class="wip-text">(WIP)</span> for users to create, share, and discover applications</li>
