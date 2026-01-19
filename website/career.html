@@ -1168,20 +1168,12 @@
         }
 
 
-        // Handle resume download
+        // Handle resume download - opens in new tab for local files
         document.getElementById('downloadResume').addEventListener('click', function (e) {
             e.preventDefault();
 
-            // Create a temporary link to force download
-            const link = document.createElement('a');
-            link.href = 'downloadResume/resume.pdf';
-            link.download = 'Matthew_Sanchez_Resume.pdf';
-            link.style.display = 'none';
-
-            // Add to DOM, click, and remove
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            // For local file access, open in new tab (browsers can't download from file:// URLs)
+            window.open('downloadResume/resume.pdf', '_blank');
         });
 
         // Load resume when page loads
