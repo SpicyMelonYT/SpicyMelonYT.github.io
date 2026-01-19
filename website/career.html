@@ -505,6 +505,26 @@
             margin-bottom: 20px;
         }
 
+        .education-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 6px;
+            gap: 15px;
+        }
+
+        .education-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .education-header .education-meta {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
         .education-item h4 {
             margin-bottom: 6px;
             font-size: 0.95rem;
@@ -1085,18 +1105,22 @@
                             <h2>Education</h2>
 
                             <div class="education-item">
-                                <h3>Bachelor of Arts</h3>
-                                <div class="education-meta">
-                                    <span class="institution">California State University, Northridge (CSUN)</span>
+                                <div class="education-header">
+                                    <h3>Bachelor of Arts</h3>
+                                    <div class="education-meta">
+                                        <span class="institution">California State University, Northridge (CSUN)</span>
+                                    </div>
                                 </div>
                                 <p>Specialized in 3D and Game Development with comprehensive training in industry-standard tools and pipelines.</p>
                             </div>
 
                             <div class="education-item">
-                                <h3>High School Diploma</h3>
-                                <div class="education-meta">
-                                    <span class="institution">John Burroughs High School</span>
-                                    <span class="dates">Burbank, CA</span>
+                                <div class="education-header">
+                                    <h3>High School Diploma</h3>
+                                    <div class="education-meta">
+                                        <span class="institution">John Burroughs High School</span>
+                                        <span class="dates">Burbank, CA</span>
+                                    </div>
                                 </div>
                                 <p>Foundation in arts and academics that prepared the groundwork for creative and technical pursuits.</p>
                             </div>
