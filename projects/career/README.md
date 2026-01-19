@@ -1,14 +1,31 @@
 # Career Assets
 
-This folder contains assets for the Career/Resume page.
+This folder was originally designed to contain resume assets, but the current implementation embeds the resume content directly in the career page to avoid CORS issues.
 
-## Files to add:
-- `resume.pdf` - Your professional resume in PDF format for download
-- `resume.md` - Optional markdown version of your resume (if you want to maintain it in text format)
+## Current Implementation:
 
-## Usage:
-The career page will automatically detect and link to your resume.pdf file when you add it here.
-The download button in the career page will provide this file to employers.
+### Resume Content:
+- Resume content is now embedded directly in `website/career.html`
+- This avoids CORS issues when opening files locally (file:// protocol)
+- Single source of truth for both web display and PDF generation
 
-## Resume Presentation:
-The career page displays your resume information in a visually appealing web format while maintaining professional standards. The download button provides the traditional PDF format that employers expect.
+### Benefits:
+- ✅ No CORS issues when developing locally
+- ✅ No external file dependencies
+- ✅ Instant loading
+- ✅ Simplified maintenance
+
+### PDF Generation:
+- Download button creates a new window with print-optimized resume
+- Uses browser's built-in print-to-PDF functionality
+- Each page container becomes a physical PDF page
+- Footers automatically position at bottom of pages
+
+### Future Options:
+If you prefer to maintain resume content in a separate file, you could:
+1. Serve the website through a local web server (avoids CORS)
+2. Use a build process to embed the content
+3. Create a JSON-based resume system
+
+## Customization:
+Edit the embedded resume content in `website/career.html` to update your professional information. The dual layout system handles web vs PDF presentation automatically.

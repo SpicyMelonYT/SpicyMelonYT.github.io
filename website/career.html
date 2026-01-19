@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" />
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="resume.css" />
     <style>
         body {
             min-height: 100vh;
@@ -43,28 +44,6 @@
             padding: 0 2rem;
         }
 
-        .resume-header {
-            text-align: center;
-            margin-bottom: 3rem;
-            color: white;
-        }
-
-        .resume-title {
-            font-size: 3rem;
-            font-weight: 300;
-            margin-bottom: 1rem;
-            background: linear-gradient(45deg, #dc3545, #ff6b6b);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .resume-subtitle {
-            font-size: 1.2rem;
-            color: rgba(255, 255, 255, 0.8);
-            margin-bottom: 2rem;
-        }
-
         .download-section {
             text-align: center;
             margin-bottom: 3rem;
@@ -93,203 +72,35 @@
             text-decoration: none;
         }
 
-        .resume-content {
-            background: rgba(26, 26, 26, 0.95);
-            border-radius: 15px;
-            padding: 3rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(220, 220, 220, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .section-title {
-            color: #dc3545;
-            font-size: 1.8rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            border-bottom: 2px solid rgba(220, 53, 69, 0.3);
-            padding-bottom: 0.5rem;
-        }
-
-        .experience-item, .education-item, .skill-item {
-            margin-bottom: 2rem;
-            padding-bottom: 2rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .experience-item:last-child,
-        .education-item:last-child,
-        .skill-item:last-child {
-            border-bottom: none;
-            padding-bottom: 0;
-            margin-bottom: 0;
-        }
-
-        .job-title {
-            color: white;
-            font-size: 1.4rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .company {
-            color: #dc3545;
-            font-size: 1.1rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-        }
-
-        .date {
-            color: rgba(255, 255, 255, 0.6);
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-        }
-
-        .description {
-            color: rgba(255, 255, 255, 0.9);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .skill-category {
-            background: rgba(220, 53, 69, 0.1);
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            border-radius: 10px;
-            padding: 1.5rem;
-        }
-
-        .skill-category h4 {
-            color: #dc3545;
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .skill-list {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-
-        .skill-tag {
-            background: rgba(220, 53, 69, 0.2);
-            color: #ff6b6b;
-            padding: 0.3rem 0.8rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .contact-info {
-            background: rgba(220, 53, 69, 0.05);
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            border-radius: 10px;
-            padding: 2rem;
-            margin-top: 2rem;
-        }
-
-        .contact-info h3 {
-            color: #dc3545;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-
-        .contact-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-        }
-
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .contact-item i {
-            color: #dc3545;
-            font-size: 1.2rem;
-            width: 20px;
-        }
-
         footer {
             grid-area: footer;
-            margin-top: auto;
+        }
+
+        /* Resume loading and error states */
+        .loading-message, .error-message {
+            text-align: center;
+            padding: 3rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .error-message {
+            color: #dc3545;
+        }
+
+        /* Resume page animations */
+        .resume-page {
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .resume-page.loaded {
+            opacity: 1;
         }
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
             .resume-container {
                 padding: 0 1rem;
-            }
-
-            .resume-content {
-                padding: 2rem 1.5rem;
-            }
-
-            .resume-title {
-                font-size: 2.5rem;
-            }
-
-            .section-title {
-                font-size: 1.5rem;
-            }
-
-            .job-title {
-                font-size: 1.2rem;
-            }
-
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .contact-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-
-        /* Print styles for resume */
-        @media print {
-            body {
-                background: white !important;
-                color: black !important;
-            }
-
-            .resume-content {
-                background: white !important;
-                border: none !important;
-                box-shadow: none !important;
-                -webkit-print-color-adjust: exact;
-            }
-
-            .download-section,
-            header,
-            footer {
-                display: none !important;
-            }
-
-            .section-title {
-                color: black !important;
-                border-color: black !important;
-            }
-
-            .job-title,
-            .company,
-            .description {
-                color: black !important;
-            }
-
-            .skill-tag {
-                background: #f0f0f0 !important;
-                color: black !important;
-                border: 1px solid #ccc;
             }
         }
     </style>
@@ -301,11 +112,7 @@
     <!-- Content -->
     <div class="content-container">
         <div class="resume-container">
-            <div class="resume-header">
-                <h1 class="resume-title">Professional Resume</h1>
-                <p class="resume-subtitle">Creative Developer & Digital Artist</p>
-            </div>
-
+            <!-- Download Section -->
             <div class="download-section">
                 <a href="#" class="download-btn" id="downloadResume">
                     <i class="bi bi-download"></i>
@@ -314,139 +121,11 @@
                 <p class="text-light mt-2 small">For applications requiring a downloadable resume</p>
             </div>
 
-            <div class="resume-content">
-                <!-- Professional Summary -->
-                <section class="mb-5">
-                    <h2 class="section-title">Professional Summary</h2>
-                    <p class="description">
-                        Innovative creative developer with expertise in 3D modeling, animation, game development, and web technologies.
-                        Passionate about exploring the intersection of technology and creativity, with a proven track record of delivering
-                        engaging digital experiences. Skilled in modern development tools and creative software, with a focus on
-                        bringing imaginative concepts to life through code and design.
-                    </p>
-                </section>
-
-                <!-- Experience -->
-                <section class="mb-5">
-                    <h2 class="section-title">Professional Experience</h2>
-
-                    <div class="experience-item">
-                        <h3 class="job-title">Creative Developer & Digital Artist</h3>
-                        <div class="company">Freelance / Personal Projects</div>
-                        <div class="date">2020 - Present</div>
-                        <div class="description">
-                            • Developed interactive web experiences using modern JavaScript frameworks and creative coding techniques<br>
-                            • Created 3D models and animations for various projects using Blender, Maya, and Unity<br>
-                            • Designed and implemented procedural graphics systems and interactive user interfaces<br>
-                            • Managed end-to-end development of digital art projects from concept to completion<br>
-                            • Collaborated on game development projects using Unity and Unreal Engine
-                        </div>
-                    </div>
-
-                    <!-- Add more experience items as needed -->
-                    <div class="experience-item">
-                        <h3 class="job-title">Technical Artist & Animator</h3>
-                        <div class="company">Independent Projects</div>
-                        <div class="date">2018 - 2020</div>
-                        <div class="description">
-                            • Produced character animations and visual effects for personal and commissioned work<br>
-                            • Developed custom tools and scripts to streamline creative workflows<br>
-                            • Created digital artwork using Photoshop, Illustrator, and various 3D software<br>
-                            • Explored emerging technologies in AR/VR and interactive media
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Education -->
-                <section class="mb-5">
-                    <h2 class="section-title">Education</h2>
-
-                    <div class="education-item">
-                        <h3 class="job-title">Bachelor of Science in Computer Science</h3>
-                        <div class="company">Your University Name</div>
-                        <div class="date">2016 - 2020</div>
-                        <div class="description">
-                            Specialized in computer graphics, game development, and software engineering.
-                            Relevant coursework included computer graphics, algorithms, data structures, and software design patterns.
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Skills -->
-                <section class="mb-5">
-                    <h2 class="section-title">Technical Skills</h2>
-
-                    <div class="skills-grid">
-                        <div class="skill-category">
-                            <h4>Programming & Development</h4>
-                            <div class="skill-list">
-                                <span class="skill-tag">JavaScript</span>
-                                <span class="skill-tag">Python</span>
-                                <span class="skill-tag">C#</span>
-                                <span class="skill-tag">C++</span>
-                                <span class="skill-tag">HTML/CSS</span>
-                                <span class="skill-tag">React</span>
-                                <span class="skill-tag">Node.js</span>
-                            </div>
-                        </div>
-
-                        <div class="skill-category">
-                            <h4>3D & Animation</h4>
-                            <div class="skill-list">
-                                <span class="skill-tag">Blender</span>
-                                <span class="skill-tag">Maya</span>
-                                <span class="skill-tag">Unity</span>
-                                <span class="skill-tag">Unreal Engine</span>
-                                <span class="skill-tag">ZBrush</span>
-                                <span class="skill-tag">Substance Painter</span>
-                            </div>
-                        </div>
-
-                        <div class="skill-category">
-                            <h4>Design & Creative</h4>
-                            <div class="skill-list">
-                                <span class="skill-tag">Photoshop</span>
-                                <span class="skill-tag">Illustrator</span>
-                                <span class="skill-tag">After Effects</span>
-                                <span class="skill-tag">Premiere Pro</span>
-                                <span class="skill-tag">Figma</span>
-                            </div>
-                        </div>
-
-                        <div class="skill-category">
-                            <h4>Other Technologies</h4>
-                            <div class="skill-list">
-                                <span class="skill-tag">Git</span>
-                                <span class="skill-tag">Docker</span>
-                                <span class="skill-tag">AWS</span>
-                                <span class="skill-tag">Linux</span>
-                                <span class="skill-tag">MySQL</span>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <!-- Contact Information -->
-                <div class="contact-info">
-                    <h3>Contact Information</h3>
-                    <div class="contact-grid">
-                        <div class="contact-item">
-                            <i class="bi bi-envelope"></i>
-                            <span>MatthewSanchezArt@gmail.com</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="bi bi-globe"></i>
-                            <span>https://spicymelonyt.github.io</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="bi bi-youtube"></i>
-                            <span>YouTube: @SpicyMelonYT</span>
-                        </div>
-                        <div class="contact-item">
-                            <i class="bi bi-github"></i>
-                            <span>GitHub: SpicyMelonYT</span>
-                        </div>
-                    </div>
+            <!-- Resume Content -->
+            <div id="resume-container">
+                <!-- Resume content will be loaded here -->
+                <div class="loading-message">
+                    <p>Loading resume...</p>
                 </div>
             </div>
         </div>
@@ -461,20 +140,540 @@
     <script>
         initializeTemplates();
 
+        // Load resume content (embedded directly to avoid CORS issues)
+        function loadResume() {
+            // Resume content embedded directly
+            const resumeContent = `
+                <!-- Page 1 Container -->
+                <div class="resume-page page-1">
+                    <div class="page-content">
+                        <!-- Header Section -->
+                        <header class="resume-header">
+                            <h1 class="name">Matthew Sanchez</h1>
+                            <p class="title">Creative Developer & Digital Artist</p>
+                            <div class="contact-info">
+                                <span class="contact-item">📧 MatthewSanchezArt@gmail.com</span>
+                                <span class="contact-item">🌐 https://spicymelonyt.github.io</span>
+                                <span class="contact-item">📺 YouTube: @SpicyMelonYT</span>
+                            </div>
+                        </header>
+
+                        <!-- Professional Summary -->
+                        <section class="summary">
+                            <h2>Professional Summary</h2>
+                            <p>
+                                Innovative creative developer with expertise in 3D modeling, animation, game development, and web technologies.
+                                Passionate about exploring the intersection of technology and creativity, with a proven track record of delivering
+                                engaging digital experiences. Skilled in modern development tools and creative software, with a focus on
+                                bringing imaginative concepts to life through code and design.
+                            </p>
+                        </section>
+
+                        <!-- Profile Image -->
+                        <div class="profile-section">
+                            <img src="SpicyMelonLogo.png" alt="Profile" class="profile-image">
+                            <p class="image-caption">
+                                Creative professional specializing in digital art, game development, and interactive experiences.
+                            </p>
+                        </div>
+
+                        <!-- Page 1 Footer -->
+                        <footer class="page-footer">
+                            <p>Thank you for considering my application. I look forward to the opportunity to contribute my skills and creativity to your team.</p>
+                        </footer>
+                    </div>
+                </div>
+
+                <!-- Page 2 Container -->
+                <div class="resume-page page-2">
+                    <div class="page-content">
+                        <!-- Experience Section -->
+                        <section class="experience">
+                            <h2>Professional Experience</h2>
+
+                            <div class="job">
+                                <h3>Creative Developer & Digital Artist</h3>
+                                <div class="job-meta">
+                                    <span class="company">Freelance / Personal Projects</span>
+                                    <span class="dates">2020 - Present</span>
+                                </div>
+                                <ul>
+                                    <li>Developed interactive web experiences using modern JavaScript frameworks and creative coding techniques</li>
+                                    <li>Created 3D models and animations for various projects using Blender, Maya, and Unity</li>
+                                    <li>Designed and implemented procedural graphics systems and interactive user interfaces</li>
+                                    <li>Managed end-to-end development of digital art projects from concept to completion</li>
+                                    <li>Collaborated on game development projects using Unity and Unreal Engine</li>
+                                </ul>
+                            </div>
+
+                            <div class="job">
+                                <h3>Technical Artist & Animator</h3>
+                                <div class="job-meta">
+                                    <span class="company">Independent Projects</span>
+                                    <span class="dates">2018 - 2020</span>
+                                </div>
+                                <ul>
+                                    <li>Produced character animations and visual effects for personal and commissioned work</li>
+                                    <li>Developed custom tools and scripts to streamline creative workflows</li>
+                                    <li>Created digital artwork using Photoshop, Illustrator, and various 3D software</li>
+                                    <li>Explored emerging technologies in AR/VR and interactive media</li>
+                                </ul>
+                            </div>
+                        </section>
+
+                        <!-- Skills Table -->
+                        <section class="skills">
+                            <h2>Technical Skills</h2>
+                            <table class="skills-table">
+                                <thead>
+                                    <tr>
+                                        <th>Category</th>
+                                        <th>Skills</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Programming</td>
+                                        <td>JavaScript, Python, C#, C++, HTML/CSS, React, Node.js</td>
+                                    </tr>
+                                    <tr>
+                                        <td>3D & Animation</td>
+                                        <td>Blender, Maya, Unity, Unreal Engine, ZBrush, Substance Painter</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Design & Creative</td>
+                                        <td>Photoshop, Illustrator, After Effects, Premiere Pro, Figma</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Other</td>
+                                        <td>Git, Docker, AWS, Linux, MySQL</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </section>
+
+                        <!-- Page 2 Footer -->
+                        <footer class="page-footer">
+                            <p>For more examples of my work, visit my portfolio at https://spicymelonyt.github.io</p>
+                        </footer>
+                    </div>
+                </div>
+
+                <!-- Page 3 Container (Optional) -->
+                <div class="resume-page page-3">
+                    <div class="page-content">
+                        <!-- Education -->
+                        <section class="education">
+                            <h2>Education</h2>
+                            <div class="education-item">
+                                <h3>Bachelor of Science in Computer Science</h3>
+                                <div class="education-meta">
+                                    <span class="institution">Your University Name</span>
+                                    <span class="dates">2016 - 2020</span>
+                                </div>
+                                <p>Specialized in computer graphics, game development, and software engineering. Relevant coursework included computer graphics, algorithms, data structures, and software design patterns.</p>
+                            </div>
+                        </section>
+
+                        <!-- Projects -->
+                        <section class="projects">
+                            <h2>Featured Projects</h2>
+                            <div class="project">
+                                <h4>Interactive Portfolio Website</h4>
+                                <p>Custom-built portfolio website featuring interactive graphics, responsive design, and dynamic content loading.</p>
+                                <p><strong>Technologies:</strong> JavaScript, HTML5, CSS3, p5.js, Bootstrap</p>
+                            </div>
+                        </section>
+
+                        <!-- Page 3 Footer -->
+                        <footer class="page-footer">
+                            <p>References available upon request.</p>
+                        </footer>
+                    </div>
+                </div>
+            `;
+
+            // Insert into our container
+            document.getElementById('resume-container').innerHTML = resumeContent;
+
+            // Add loaded class to trigger fade-in animation
+            setTimeout(() => {
+                document.querySelectorAll('.resume-page').forEach(page => {
+                    page.classList.add('loaded');
+                });
+            }, 100);
+        }
+
         // Handle resume download
         document.getElementById('downloadResume').addEventListener('click', function(e) {
             e.preventDefault();
 
-            // For now, show an alert - you'll need to add your actual resume PDF
-            alert('Resume download functionality will be implemented once you add your resume PDF file to the projects/career/ folder.');
+            // Create a new window with the resume content and print styles
+            const resumeWindow = window.open('', '_blank');
 
-            // When you have the resume file, uncomment and modify this:
-            // const link = document.createElement('a');
-            // link.href = 'projects/career/resume.pdf'; // Update path as needed
-            // link.download = 'Matthew_Sanchez_Resume.pdf';
-            // document.body.appendChild(link);
-            // link.click();
-            // document.body.removeChild(link);
+            // Get the resume content from the page
+            const resumeContent = document.getElementById('resume-container').innerHTML;
+
+            // Create the full HTML document with print styles
+            const fullHTML = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Matthew Sanchez - Resume</title>
+                    <style>
+                        /* Resume Styles - Dual Layout System */
+                        /* Web layout (continuous flow) vs Print layout (paginated) */
+
+                        /* ===== BASE STYLES ===== */
+                        body {
+                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                            line-height: 1.6;
+                            color: #333;
+                            margin: 0;
+                            padding: 0;
+                        }
+
+                        /* ===== PDF LAYOUT (Print) ===== */
+                        @media print {
+                            body {
+                                background: white !important;
+                                color: black !important;
+                                font-size: 12pt;
+                                line-height: 1.4;
+                            }
+
+                            .resume-page {
+                                page-break-before: always;
+                                min-height: 100vh;
+                                display: flex;
+                                flex-direction: column;
+                                padding: 0.75in; /* Standard margins */
+                                background: white !important;
+                                border: none !important;
+                                border-radius: 0 !important;
+                                box-shadow: none !important;
+                                margin: 0 !important;
+                                position: relative;
+                            }
+
+                            .resume-page:first-child {
+                                page-break-before: avoid; /* No break before first page */
+                            }
+
+                            .page-content {
+                                flex: 1;
+                                display: flex;
+                                flex-direction: column;
+                                height: 100%;
+                            }
+
+                            .page-footer {
+                                margin-top: auto;
+                                padding-top: 1rem;
+                                border-top: 1px solid #ccc;
+                                font-style: italic;
+                                color: #666;
+                                position: relative;
+                                bottom: 0;
+                            }
+                        }
+
+                        /* ===== SHARED CONTENT STYLES ===== */
+
+                        /* Header */
+                        .resume-header {
+                            text-align: center;
+                            margin-bottom: 2rem;
+                        }
+
+                        .name {
+                            font-size: 2.5rem;
+                            font-weight: 300;
+                            margin-bottom: 0.5rem;
+                            background: linear-gradient(45deg, #dc3545, #ff6b6b);
+                            -webkit-background-clip: text;
+                            -webkit-text-fill-color: transparent;
+                            background-clip: text;
+                        }
+
+                        .title {
+                            font-size: 1.2rem;
+                            color: #dc3545;
+                            margin-bottom: 1rem;
+                            font-weight: 500;
+                        }
+
+                        .contact-info {
+                            display: flex;
+                            flex-wrap: wrap;
+                            justify-content: center;
+                            gap: 1rem;
+                            margin-bottom: 1rem;
+                        }
+
+                        .contact-item {
+                            font-size: 0.9rem;
+                            color: #666;
+                        }
+
+                        /* Sections */
+                        section {
+                            margin-bottom: 2rem;
+                        }
+
+                        section h2 {
+                            color: #dc3545;
+                            font-size: 1.5rem;
+                            font-weight: 600;
+                            margin-bottom: 1rem;
+                            border-bottom: 2px solid rgba(220, 53, 69, 0.3);
+                            padding-bottom: 0.5rem;
+                        }
+
+                        /* Summary */
+                        .summary p {
+                            font-size: 1.1rem;
+                            line-height: 1.7;
+                            text-align: justify;
+                        }
+
+                        /* Profile Section */
+                        .profile-section {
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            margin: 2rem 0;
+                        }
+
+                        .profile-image {
+                            width: 120px;
+                            height: 120px;
+                            border-radius: 50%;
+                            object-fit: cover;
+                            border: 3px solid #dc3545;
+                            margin-bottom: 1rem;
+                        }
+
+                        .image-caption {
+                            font-size: 0.9rem;
+                            color: rgba(255, 255, 255, 0.8);
+                            text-align: center;
+                            max-width: 300px;
+                        }
+
+                        /* Experience */
+                        .job {
+                            margin-bottom: 2rem;
+                            padding-bottom: 1rem;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+
+                        .job:last-child {
+                            border-bottom: none;
+                        }
+
+                        .job h3 {
+                            color: white;
+                            font-size: 1.3rem;
+                            margin-bottom: 0.5rem;
+                        }
+
+                        .job-meta {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 1rem;
+                            font-size: 0.9rem;
+                        }
+
+                        .company {
+                            color: #dc3545;
+                            font-weight: 500;
+                        }
+
+                        .dates {
+                            color: rgba(255, 255, 255, 0.6);
+                        }
+
+                        .job ul {
+                            margin: 0;
+                            padding-left: 1.5rem;
+                        }
+
+                        .job li {
+                            margin-bottom: 0.5rem;
+                            color: rgba(255, 255, 255, 0.9);
+                        }
+
+                        /* Skills Table */
+                        .skills-table {
+                            width: 100%;
+                            border-collapse: collapse;
+                            margin-top: 1rem;
+                            background: rgba(220, 53, 69, 0.05);
+                            border-radius: 8px;
+                            overflow: hidden;
+                        }
+
+                        .skills-table th,
+                        .skills-table td {
+                            padding: 0.75rem;
+                            text-align: left;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+
+                        .skills-table th {
+                            background: rgba(220, 53, 69, 0.1);
+                            color: #dc3545;
+                            font-weight: 600;
+                        }
+
+                        .skills-table td {
+                            color: rgba(255, 255, 255, 0.9);
+                        }
+
+                        .skills-table tr:last-child td {
+                            border-bottom: none;
+                        }
+
+                        /* Education */
+                        .education-item {
+                            margin-bottom: 2rem;
+                        }
+
+                        .education-item h3 {
+                            color: white;
+                            font-size: 1.2rem;
+                            margin-bottom: 0.5rem;
+                        }
+
+                        .education-meta {
+                            display: flex;
+                            justify-content: space-between;
+                            margin-bottom: 1rem;
+                            font-size: 0.9rem;
+                        }
+
+                        .institution {
+                            color: #dc3545;
+                            font-weight: 500;
+                        }
+
+                        .education-item p {
+                            color: rgba(255, 255, 255, 0.9);
+                            line-height: 1.6;
+                        }
+
+                        /* Projects */
+                        .project {
+                            margin-bottom: 2rem;
+                            padding-bottom: 1rem;
+                            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                        }
+
+                        .project:last-child {
+                            border-bottom: none;
+                        }
+
+                        .project h4 {
+                            color: white;
+                            font-size: 1.1rem;
+                            margin-bottom: 0.5rem;
+                        }
+
+                        .project p {
+                            color: rgba(255, 255, 255, 0.9);
+                            margin-bottom: 0.5rem;
+                        }
+
+                        .project strong {
+                            color: #dc3545;
+                        }
+
+                        /* ===== PRINT-SPECIFIC ADJUSTMENTS ===== */
+                        @media print {
+                            .name {
+                                -webkit-text-fill-color: black !important;
+                                color: black !important;
+                            }
+
+                            .title {
+                                color: black !important;
+                            }
+
+                            .contact-item {
+                                color: #333 !important;
+                            }
+
+                            section h2 {
+                                color: black !important;
+                                border-color: #ccc !important;
+                            }
+
+                            .job h3,
+                            .project h4,
+                            .education-item h3 {
+                                color: black !important;
+                            }
+
+                            .company,
+                            .institution {
+                                color: black !important;
+                            }
+
+                            .job li,
+                            .summary p,
+                            .education-item p,
+                            .project p {
+                                color: black !important;
+                            }
+
+                            .skills-table {
+                                background: #f9f9f9 !important;
+                            }
+
+                            .skills-table th {
+                                background: #e9e9e9 !important;
+                                color: black !important;
+                            }
+
+                            .skills-table td {
+                                color: black !important;
+                                border-color: #ddd !important;
+                            }
+
+                            .profile-image {
+                                border-color: #ccc !important;
+                            }
+
+                            .image-caption {
+                                color: #666 !important;
+                            }
+                        }
+                    </style>
+                </head>
+                <body>
+                    ${resumeContent}
+                </body>
+                </html>
+            `;
+
+            // Write the content to the new window
+            resumeWindow.document.write(fullHTML);
+            resumeWindow.document.close();
+
+            // Wait for the window to load, then trigger print
+            resumeWindow.onload = function() {
+                setTimeout(() => {
+                    resumeWindow.print();
+                }, 500); // Small delay to ensure styles are loaded
+            };
+        });
+
+        // Load resume when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadResume();
         });
     </script>
 </body>
