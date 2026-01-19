@@ -21,7 +21,8 @@
             top: 0;
             left: 0;
             right: 0;
-            z-index: 1050; /* Higher than Bootstrap's default */
+            z-index: 1050;
+            /* Higher than Bootstrap's default */
             background-color: rgba(26, 26, 26, 0.95);
             backdrop-filter: blur(10px);
             border-bottom: 3px solid rgba(220, 220, 220, 0.9);
@@ -90,6 +91,7 @@
         .sticky-header-overlay .nav-link.active {
             color: #dc3545;
         }
+
         body {
             min-height: 100vh;
             display: grid;
@@ -101,22 +103,24 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
         }
 
-header {
-    grid-area: header;
-}
+        header {
+            grid-area: header;
+        }
 
-/* Hide original header on career page */
-body.career-page header:first-of-type {
-    display: none;
-}
+        /* Hide original header on career page */
+        body.career-page header:first-of-type {
+            display: none;
+        }
 
         .content-container {
             grid-area: content;
-            padding: 8rem 0 3rem 0; /* Extra top padding for sticky header */
+            padding: 8rem 0 3rem 0;
+            /* Extra top padding for sticky header */
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative; /* For absolute positioning context */
+            position: relative;
+            /* For absolute positioning context */
         }
 
         .resume-container {
@@ -128,9 +132,11 @@ body.career-page header:first-of-type {
 
         .download-section-top {
             position: fixed;
-            top: 100px; /* Below sticky header */
+            top: 100px;
+            /* Below sticky header */
             right: 2rem;
-            z-index: 1040; /* Below sticky header but above content */
+            z-index: 1040;
+            /* Below sticky header but above content */
         }
 
         .download-btn-small {
@@ -594,13 +600,13 @@ body.career-page header:first-of-type {
         }
 
         .career-link-2 {
-            color:#ff4561 !important;
+            color: #ff4561 !important;
             text-decoration: none;
             transition: color 0.3s ease;
         }
 
         .career-link-2:hover {
-            color:rgb(255, 127, 146) !important;
+            color: rgb(255, 127, 146) !important;
             text-decoration: underline;
         }
 
@@ -637,13 +643,15 @@ body.career-page header:first-of-type {
 
             .download-section-top {
                 position: fixed;
-                top: 100px; /* Below mobile header */
+                top: 100px;
+                /* Below mobile header */
                 right: 1rem;
                 left: auto;
             }
 
             .content-container {
-                padding: 8rem 0 3rem 0; /* Extra padding for mobile sticky header */
+                padding: 8rem 0 3rem 0;
+                /* Extra padding for mobile sticky header */
             }
 
             .work-details h2 {
@@ -670,8 +678,10 @@ body.career-page header:first-of-type {
     <header class="sticky-header-overlay">
         <div class="container">
             <a class="navbar-brand fw-bold" href="index.html">
-                <img src="SpicyMelonLogo.png" alt="SpicyMelon Logo" width="35" height="35" class="d-inline-block align-middle me-3">
-                <span class="text-danger">Spicy</span><span class="text-normal">Melon</span><span class="text-secondary author-name">&nbsp;-&nbsp;&nbsp;Matthew Sanchez</span>
+                <img src="SpicyMelonLogo.png" alt="SpicyMelon Logo" width="35" height="35"
+                    class="d-inline-block align-middle me-3">
+                <span class="text-danger">Spicy</span><span class="text-normal">Melon</span><span
+                    class="text-secondary author-name">&nbsp;-&nbsp;&nbsp;Matthew Sanchez</span>
             </a>
             <div class="navbar-collapse">
                 <ul class="navbar-nav ms-auto">
@@ -815,14 +825,13 @@ body.career-page header:first-of-type {
                                 <section class="profile">
                                     <h3>Profile</h3>
                                     <p>
-                                        Experienced Asset Artist and Developer skilled in creating optimized
-                                        3D assets for high-impact projects in feature films, games, and
-                                        previs/postvis pipelines.
+                                        Co-Owner and Senior Developer of Revolt, an AI-powered app creation platform enabling users to build browser-based, desktop, and web applications entirely in the browser. Leading full-stack development of collaborative tooling, in-browser IDEs, and AI-assisted workflows focused on rapid creation, sharing, and iteration.
                                     </p>
                                     <p>
-                                        Proficient in Maya, Blender, Unreal, and Unity with a strong programming
-                                        background in Python, C#, C++, and JavaScript. Contributed to 11 feature
-                                        films and a TV series.
+                                        Experienced Asset Artist and Developer skilled in creating and optimizing high-quality 3D assets for high-impact feature film, TV, game, and previs/postvis pipelines, meeting strict creative and technical production standards.
+                                    </p>
+                                    <p>
+                                        Proficient in Maya, Blender, Unreal, and Unity with a strong programming background in Python, C#, C++, and JavaScript. Contributed to 11 feature films and a TV series, supporting fast-paced, director-driven production workflows.
                                     </p>
                                 </section>
 
