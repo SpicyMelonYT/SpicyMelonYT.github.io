@@ -236,7 +236,7 @@
 
         /* Work Details Section */
         .work-details {
-            margin-top: 2rem;
+            margin-top: 0rem;
         }
 
         .work-details h2 {
@@ -249,8 +249,8 @@
         }
 
         .work-details .job {
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
@@ -259,21 +259,38 @@
         }
 
         .work-details .job-header {
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .job-title-with-logo {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+
+        .job-title-with-logo .company,
+        .job-title-with-logo .date {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+
+        .job-title-with-logo .company {
+            color: #dc3545;
+        }
+
+        .job-title-with-logo .date {
+            color: rgba(255, 255, 255, 0.9);
+            margin-left: auto;
         }
 
         .job-logo {
-            width: 40px;
-            height: 40px;
+            width: 24px;
+            height: 24px;
             object-fit: contain;
             flex-shrink: 0;
+            transform: scale(2)
         }
 
         .job-title-with-logo h3 {
@@ -632,7 +649,7 @@
 
         .job-header .date {
             font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.9);
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .job ul,
@@ -922,6 +939,17 @@
                             <h3>Skills</h3>
 
                             <div class="skill-categories">
+
+                                <div class="skill-group">
+                                    <h4>Programming & Web</h4>
+                                    <ul>
+                                        <li>Python: Scripting, Automation, Data Processing</li>
+                                        <li>C#, C++: Game Development, Performance</li>
+                                        <li>JavaScript: Web Development, Interactive Apps</li>
+                                        <li>HTML/CSS: Responsive Web Design</li>
+                                    </ul>
+                                </div>
+
                                 <div class="skill-group">
                                     <h4>3D and Game Development</h4>
                                     <ul>
@@ -942,15 +970,6 @@
                                     </ul>
                                 </div>
 
-                                <div class="skill-group">
-                                    <h4>Programming & Web</h4>
-                                    <ul>
-                                        <li>Python: Scripting, Automation, Data Processing</li>
-                                        <li>C#, C++: Game Development, Performance</li>
-                                        <li>JavaScript: Web Development, Interactive Apps</li>
-                                        <li>HTML/CSS: Responsive Web Design</li>
-                                    </ul>
-                                </div>
                             </div>
                         </section>
 
@@ -974,9 +993,9 @@
                                     <div class="job-title-with-logo">
                                         <img src="revoltLogo.png" alt="Revolt Logo" class="job-logo">
                                         <h3>Revolt - AI App Creation Platform</h3>
+                                        <span class="company">Co-Owner & Senior Developer</span>
+                                        <span class="date">November 2025 - Present</span>
                                     </div>
-                                    <span class="company">Co-Owner & Senior Developer | rvt.dev</span>
-                                    <span class="date">November 2025 - Present</span>
                                 </div>
                                 <ul>
                                     <li>Serving as co-owner and senior developer of Revolt, a comprehensive web platform for creating browser-based, desktop, and website applications directly in the browser</li>
@@ -989,9 +1008,11 @@
 
                             <div class="job">
                                 <div class="job-header">
-                                    <h3>Previs Asset Artist</h3>
-                                    <span class="company">Day For Nite | Los Angeles, CA</span>
-                                    <span class="date">July 2023 - Present</span>
+                                    <div class="job-title-with-logo">
+                                        <h3>Previs Asset Artist</h3>
+                                        <span class="company">Day For Nite | Los Angeles, CA</span>
+                                        <span class="date">July 2023 - Present</span>
+                                    </div>
                                 </div>
                                 <ul>
                                     <li>Created and optimized hundreds of high-quality 3D assets for previs and postvis pipelines, dedicating extensive hours to ensure all models met strict creative and technical standards for feature films and TV projects.</li>
@@ -1004,9 +1025,11 @@
 
                             <div class="job">
                                 <div class="job-header">
-                                    <h3>Internship Student</h3>
-                                    <span class="company">Day For Nite | Los Angeles, CA</span>
-                                    <span class="date">6 Week Program</span>
+                                    <div class="job-title-with-logo">
+                                        <h3>Internship Student</h3>
+                                        <span class="company">Day For Nite | Los Angeles, CA</span>
+                                        <span class="date">6 Week Program</span>
+                                    </div>
                                 </div>
                                 <ul>
                                     <li>Trained extensively in the postvis pipeline, learning to interpret shot and scene codes, set up cameras in Maya, and choreograph scenes by importing assets created by the asset team. Contributed to both previs and postvis workflows, gaining foundational skills in visual storytelling.</li>
