@@ -306,21 +306,46 @@
         }
 
         .links {
+            width: 100%;
+        }
+
+        .links h2 {
+            width: 100%;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .contact-grid {
             display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            padding: 8px 0;
+        }
+
+        .contact-item i {
+            color: #dc3545;
+            font-size: 1.1rem;
+            min-width: 20px;
         }
 
         .link-item {
             display: flex;
             align-items: center;
-            gap: 6px;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         .link-item i {
             color: #dc3545;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            min-width: 20px;
         }
 
         .work-experience h3 {
@@ -401,7 +426,8 @@
         /* Link styling */
         .page-footer a,
         .contact-item a,
-        .link-item a {
+        .link-item a,
+        .career-link {
             color: #cc6b7a !important;
             /* Desaturated red */
             text-decoration: none;
@@ -410,9 +436,21 @@
 
         .page-footer a:hover,
         .contact-item a:hover,
-        .link-item a:hover {
+        .link-item a:hover,
+        .career-link:hover {
             color: #ff6b6b !important;
             /* Brighter red on hover */
+            text-decoration: underline;
+        }
+
+        .career-link-2 {
+            color:#ff4561 !important;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .career-link-2:hover {
+            color:rgb(255, 127, 146) !important;
             text-decoration: underline;
         }
 
@@ -605,13 +643,13 @@
                                 <div class="job-header">
                                     <h3>Revolt - AI App Creation Platform</h3>
                                     <span class="company">Personal Project | rvt.dev</span>
-                                    <span class="date">November 2025 – Present</span>
+                                    <span class="date">November 2025 - Present</span>
                                 </div>
                                 <ul>
                                     <li>Developed Revolt, a comprehensive web platform for creating browser-based, desktop, and website applications directly in the browser</li>
                                     <li>Implemented full-featured development environment allowing users to edit code, utilize AI for code editing and actions, preview applications, and share creations</li>
                                     <li>Built team collaboration features enabling users to build teams and work together on projects</li>
-                                    <li>Created a public platform accessible at rvt.dev for users to create, share, and discover applications</li>
+                                    <li>Created a public platform accessible at <a href="https://rvt.dev" target="_blank" class="career-link-2">rvt.dev</a> for users to create, share, and discover applications</li>
                                     <li>Currently in active development with ongoing feature enhancements and user experience improvements</li>
                                 </ul>
                             </div>
@@ -620,7 +658,7 @@
                                 <div class="job-header">
                                     <h3>Previs Asset Artist</h3>
                                     <span class="company">Day For Nite | Los Angeles, CA</span>
-                                    <span class="date">July 2023 – Present</span>
+                                    <span class="date">July 2023 - Present</span>
                                 </div>
                                 <ul>
                                     <li>Created and optimized hundreds of high-quality 3D assets for previs and postvis pipelines, dedicating extensive hours to ensure all models met strict creative and technical standards for feature films and TV projects.</li>
@@ -1115,10 +1153,13 @@
         margin-bottom: 20px !important;
     }
 
-    .link-item {
-        display: inline-block !important;
-        margin-right: 15px !important;
-        margin-bottom: 5px !important;
+    .contact-grid {
+        display: block !important;
+    }
+
+    .contact-item {
+        display: block !important;
+        margin-bottom: 8px !important;
     }
 
     /* Work details print styles */
@@ -1138,7 +1179,8 @@
     /* Print link styling */
     .page-footer a,
     .contact-item a,
-    .link-item a {
+    .link-item a,
+    .career-link {
         color: #666 !important;
         text-decoration: underline !important;
     }
