@@ -246,6 +246,7 @@ section h2 {
     padding: 4px 20px;
     text-align: left;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 12px;
 }
 
 .skills-table th {
@@ -281,6 +282,11 @@ section h2 {
 }
 
 .institution {
+    color: #dc3545;
+    font-weight: 500;
+}
+
+.degree {
     color: #dc3545;
     font-weight: 500;
 }
