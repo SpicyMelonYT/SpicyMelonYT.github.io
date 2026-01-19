@@ -15,6 +15,81 @@
     <link rel="stylesheet" href="style.css" />
     <link rel="stylesheet" href="resume.css" />
     <style>
+        /* Sticky Header Overlay */
+        .sticky-header-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1050; /* Higher than Bootstrap's default */
+            background-color: rgba(26, 26, 26, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 3px solid rgba(220, 220, 220, 0.9);
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .sticky-header-overlay .container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sticky-header-overlay .navbar-brand {
+            font-size: 1.5rem;
+            letter-spacing: 0.5px;
+            display: flex;
+            align-items: center;
+            margin: 0;
+        }
+
+        .sticky-header-overlay .text-danger {
+            color: #dc3545 !important;
+        }
+
+        .sticky-header-overlay .text-normal {
+            color: #ffffff !important;
+        }
+
+        .sticky-header-overlay .text-secondary {
+            color: #6c757d !important;
+        }
+
+        .sticky-header-overlay .navbar-collapse {
+            display: flex;
+            align-items: center;
+        }
+
+        .sticky-header-overlay .navbar-nav {
+            display: flex;
+            flex-direction: row;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .sticky-header-overlay .nav-item {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+
+        .sticky-header-overlay .nav-link {
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            transition: all 0.3s ease;
+            display: inline-block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+        }
+
+        .sticky-header-overlay .nav-link:hover {
+            color: #dc3545;
+            transform: scale(1.1);
+        }
+
+        .sticky-header-overlay .nav-link.active {
+            color: #dc3545;
+        }
         body {
             min-height: 100vh;
             display: grid;
@@ -26,13 +101,18 @@
             background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
         }
 
-        header {
-            grid-area: header;
-        }
+header {
+    grid-area: header;
+}
+
+/* Hide original header on career page */
+body.career-page header:first-of-type {
+    display: none;
+}
 
         .content-container {
             grid-area: content;
-            padding: 5rem 0 3rem 0; /* Extra top padding for download button */
+            padding: 8rem 0 3rem 0; /* Extra top padding for sticky header */
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -47,10 +127,10 @@
         }
 
         .download-section-top {
-            position: absolute;
-            top: 120px; /* Below header */
+            position: fixed;
+            top: 100px; /* Below sticky header */
             right: 2rem;
-            z-index: 10;
+            z-index: 1040; /* Below sticky header but above content */
         }
 
         .download-btn-small {
@@ -517,19 +597,44 @@
 
         /* Mobile responsiveness */
         @media (max-width: 768px) {
+            .sticky-header-overlay {
+                padding: 0.75rem 0;
+            }
+
+            .sticky-header-overlay .container {
+                flex-direction: column;
+                gap: 0.5rem;
+                align-items: center;
+            }
+
+            .sticky-header-overlay .navbar-brand {
+                font-size: 1.25rem;
+            }
+
+            .sticky-header-overlay .navbar-nav {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.25rem;
+            }
+
+            .sticky-header-overlay .nav-link {
+                padding: 0.375rem 0.75rem;
+                font-size: 0.9rem;
+            }
+
             .resume-container {
                 padding: 0 1rem;
             }
 
             .download-section-top {
-                position: static;
-                text-align: center;
-                margin-bottom: 2rem;
-                margin-top: 1rem;
+                position: fixed;
+                top: 100px; /* Below mobile header */
+                right: 1rem;
+                left: auto;
             }
 
             .content-container {
-                padding: 3rem 0;
+                padding: 8rem 0 3rem 0; /* Extra padding for mobile sticky header */
             }
 
             .work-details h2 {
@@ -548,9 +653,38 @@
     </style>
 </head>
 
-<body>
+<body class="career-page">
     <!-- Header -->
     <header class="navbar navbar-expand-lg navbar-dark"></header>
+
+    <!-- Sticky Header Overlay (Career Page Only) -->
+    <header class="sticky-header-overlay">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="index.html">
+                <img src="SpicyMelonLogo.png" alt="SpicyMelon Logo" width="35" height="35" class="d-inline-block align-middle me-3">
+                <span class="text-danger">Spicy</span><span class="text-normal">Melon</span><span class="text-secondary author-name">&nbsp;-&nbsp;&nbsp;Matthew Sanchez</span>
+            </a>
+            <div class="navbar-collapse">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="index.html">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="art.html">Art</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="code.html">Code</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="reel.html">Reel</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="career.html">Career</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </header>
 
     <!-- Content -->
     <div class="content-container">
@@ -1266,6 +1400,15 @@
 
     .wip-text {
         color: #666 !important;
+    }
+
+    /* Print styles */
+    .sticky-header-overlay {
+        display: none !important;
+    }
+
+    .download-section-top {
+        display: none !important;
     }
 
     /* Print link styling */
