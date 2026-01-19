@@ -415,6 +415,55 @@
             color: rgba(255, 255, 255, 0.9);
         }
 
+        /* Full-width skills section */
+        .skills-full-width {
+            margin-top: 40px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .skills-full-width h3 {
+            color: #dc3545 !important;
+            margin-bottom: 24px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 2px solid #dc3545;
+            padding-bottom: 8px;
+            text-align: center;
+        }
+
+        .skills-full-width .skill-group {
+            margin-bottom: 24px;
+        }
+
+        .skills-full-width .skill-group h4 {
+            color: #dc3545 !important;
+            margin-bottom: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            border-bottom: 1px solid #dc3545;
+            padding-bottom: 6px;
+        }
+
+        .skills-full-width .skill-group ul {
+            margin: 0;
+            padding-left: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+        }
+
+        .skills-full-width .skill-group li {
+            margin-bottom: 6px;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.95);
+            line-height: 1.4;
+        }
+
         .education-item {
             margin-bottom: 20px;
         }
@@ -463,6 +512,14 @@
 
         .links {
             width: 100%;
+        }
+
+        .right-column .links {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: flex-start;
         }
 
         .links h2 {
@@ -773,36 +830,6 @@
                                     </div>
                                 </section>
 
-                                <section class="skills">
-                                    <h3>Skills</h3>
-
-                                    <div class="skill-group">
-                                        <h4>3D and Game Development</h4>
-                                        <ul>
-                                            <li>Unreal Engine: Animation, Rigging, Niagara</li>
-                                            <li>Unity Engine: Scripting, Optimization</li>
-                                            <li>Maya/Blender: Modeling, Rigging, Texturing</li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="skill-group">
-                                        <h4>Adobe Suite</h4>
-                                        <ul>
-                                            <li>Photoshop</li>
-                                            <li>After Effects</li>
-                                            <li>Premiere Pro</li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="skill-group">
-                                        <h4>Programming</h4>
-                                        <ul>
-                                            <li>Python, C#, C++, JavaScript</li>
-                                            <li>HTML, CSS</li>
-                                        </ul>
-                                    </div>
-                                </section>
-
                                 <section class="education">
                                     <h3>Education</h3>
 
@@ -856,6 +883,37 @@
 
                             </main>
                         </div>
+
+                        <!-- Skills Section -->
+                        <section class="skills-full-width">
+                            <h3>Skills</h3>
+
+                            <div class="skill-group">
+                                <h4>3D and Game Development</h4>
+                                <ul>
+                                    <li>Unreal Engine: Animation, Rigging, Niagara</li>
+                                    <li>Unity Engine: Scripting, Optimization</li>
+                                    <li>Maya/Blender: Modeling, Rigging, Texturing</li>
+                                </ul>
+                            </div>
+
+                            <div class="skill-group">
+                                <h4>Adobe Suite</h4>
+                                <ul>
+                                    <li>Photoshop</li>
+                                    <li>After Effects</li>
+                                    <li>Premiere Pro</li>
+                                </ul>
+                            </div>
+
+                            <div class="skill-group">
+                                <h4>Programming</h4>
+                                <ul>
+                                    <li>Python, C#, C++, JavaScript</li>
+                                    <li>HTML, CSS</li>
+                                </ul>
+                            </div>
+                        </section>
 
                         <!-- Page 1 Footer -->
                         <footer class="page-footer">
