@@ -145,6 +145,22 @@
         transform: scale(1.02);
       }
 
+      /* Embed container styles */
+      .embed-container {
+        opacity: 0;
+      }
+
+      .embed-container.loaded {
+        opacity: 1;
+      }
+
+      .embed-container iframe {
+        width: 100%;
+        height: 100%;
+        border: none;
+        border-radius: 8px;
+      }
+
       /* Initial load fade in */
       .thumbnail-container.loaded {
         opacity: 1;

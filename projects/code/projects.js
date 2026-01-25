@@ -1,6 +1,29 @@
 const CODE_PROJECTS = {
-  order: ["chatollamaagent", "chatollama", "shinra_saito", "from_within"],
+  order: ["revolt_website", "chatollamaagent", "chatollama", "shinra_saito", "from_within"],
   data: {
+    revolt_website: {
+      title: "Revolt Website",
+      description:
+        "A fully featured App Creation platform that allows users to create web apps, desktop apps, and websites, with no code using AI.",
+      size: { width: 4, height: 2 },
+      thumbnails: [
+        {
+          image: "revolt_website/rvt.dev_app.png",
+        },
+        {
+          embed: `<iframe src="https://rvt.dev/playspace/696b706fc1911a1bac990a0d?mode=embed" width="800" height="600" frameborder="0" allowfullscreen style="border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);"></iframe>`,
+        },
+      ],
+      links: [
+        {
+          text: "Website",
+          url: "https://rvt.dev",
+          icon: "globe",
+        },
+      ],
+      date: "Nov 3, 2025 - Present",
+      tags: ["AI", "No-Code", "Web Development", "App Creation", "Platform"],
+    },
     chatollamaagent: {
       title: "Chat Ollama Agent",
       description:

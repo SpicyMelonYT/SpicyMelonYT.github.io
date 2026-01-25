@@ -388,12 +388,35 @@ class ProjectLoader {
     const availableWidth = containerWidth - (PADDING * 2);
     const availableHeight = containerHeight - (PADDING * 2);
 
-    // Get image data with aspect ratios
-    const imageData = images.map(img => ({
-      aspectRatio: img.naturalWidth / img.naturalHeight || 1.5, // Fallback ratio if image not loaded
-      width: img.naturalWidth,
-      height: img.naturalHeight
-    }));
+    // Get image/embed data with aspect ratios
+    const imageData = images.map(item => {
+      // Check if it's an embed container
+      if (item.classList && item.classList.contains('embed-container')) {
+        const iframe = item.querySelector('iframe');
+        if (iframe) {
+          // Try to get dimensions from iframe attributes
+          const width = parseInt(iframe.getAttribute('width')) || 800;
+          const height = parseInt(iframe.getAttribute('height')) || 600;
+          return {
+            aspectRatio: width / height,
+            width: width,
+            height: height
+          };
+        }
+        // Default aspect ratio for embeds (4:3)
+        return {
+          aspectRatio: 4 / 3,
+          width: 800,
+          height: 600
+        };
+      }
+      // Regular image
+      return {
+        aspectRatio: item.naturalWidth / item.naturalHeight || 1.5, // Fallback ratio if image not loaded
+        width: item.naturalWidth,
+        height: item.naturalHeight
+      };
+    });
 
     const numImages = images.length;
 
@@ -557,7 +580,17 @@ class ProjectLoader {
                     <div class="code-gallery">
                         ${project.thumbnails
                           .map(
-                            (thumbnail) => `
+                            (thumbnail) => {
+                              if (thumbnail.embed) {
+                                // Render iframe for embeds
+                                return `
+                            <div class="thumbnail-container embed-container">
+                                ${thumbnail.embed}
+                            </div>
+                        `;
+                              } else {
+                                // Render image/video thumbnail
+                                return `
                             <div class="thumbnail-container">
                                 <img 
                                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3C/svg%3E"
@@ -577,7 +610,9 @@ class ProjectLoader {
                                 </div>
                                 ` : ''}
                             </div>
-                        `
+                        `;
+                              }
+                            }
                           )
                           .join("")}
                     </div>
@@ -621,10 +656,12 @@ class ProjectLoader {
 
   // New method to handle layout application
   applyLayouts(images, layouts, isInitialLoad = false) {
-    images.forEach((img, i) => {
+    images.forEach((item, i) => {
       const layout = layouts[i];
-      // Get the container instead of working with the image directly
-      const container = img.closest('.thumbnail-container');
+      // Get the container - item might be the container itself (for embeds) or an image inside
+      const container = item.classList && item.classList.contains('thumbnail-container') 
+        ? item 
+        : item.closest('.thumbnail-container');
       if (!container) return;
 
       if (isInitialLoad) {
@@ -669,7 +706,10 @@ class ProjectLoader {
     if (!gallery) return;
 
     const images = Array.from(gallery.querySelectorAll("img"));
-    if (images.length === 0) return;
+    const embedContainers = Array.from(gallery.querySelectorAll(".embed-container"));
+    const allItems = [...images, ...embedContainers];
+    
+    if (allItems.length === 0) return;
 
     // Get gallery dimensions
     const galleryRect = gallery.getBoundingClientRect();
@@ -680,11 +720,11 @@ class ProjectLoader {
 
     // Apply initial placeholder layout
     const placeholderLayouts = this.calculatePlaceholderLayout(
-      images.length,
+      allItems.length,
       galleryWidth,
       galleryHeight
     );
-    this.applyLayouts(images, placeholderLayouts, true);
+    this.applyLayouts(allItems, placeholderLayouts, true);
 
     // Start observing images for lazy loading
     images.forEach(img => {
@@ -696,6 +736,31 @@ class ProjectLoader {
     // Set up layout recalculation for when images load
     let loadedCount = 0;
     const totalImages = images.length;
+    const totalItems = allItems.length;
+
+    // Handle embed containers - they're ready immediately
+    embedContainers.forEach((container, index) => {
+      const iframe = container.querySelector('iframe');
+      if (iframe) {
+        // Set iframe to fill container
+        iframe.style.width = '100%';
+        iframe.style.height = '100%';
+      }
+      // Mark embed containers as loaded immediately
+      container.classList.add('loaded');
+    });
+
+    // If we only have embeds, apply layout immediately
+    if (totalImages === 0 && embedContainers.length > 0) {
+      requestAnimationFrame(() => {
+        const layouts = this.calculateFreeformLayout(
+          allItems,
+          galleryWidth,
+          galleryHeight
+        );
+        this.applyLayouts(allItems, layouts, false);
+      });
+    }
 
     images.forEach((img, index) => {
       const uniqueId = `${projectId}-${index}`;
@@ -711,11 +776,11 @@ class ProjectLoader {
         if (loadedCount === totalImages) {
           requestAnimationFrame(() => {
             const layouts = this.calculateFreeformLayout(
-              images,
+              allItems,
               galleryWidth,
               galleryHeight
             );
-            this.applyLayouts(images, layouts, false);
+            this.applyLayouts(allItems, layouts, false);
           });
         }
       };
