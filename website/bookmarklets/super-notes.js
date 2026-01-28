@@ -1,117 +1,89 @@
-(() => {
-  /* ===============================
-     Super Notes – Remote Bookmarklet App
-     =============================== */
-
+(function () {
   if (window.__SUPER_NOTES_APP__) return;
   window.__SUPER_NOTES_APP__ = true;
 
   const HOST = location.hostname || "unknown";
-  const KEY = `super-notes:${HOST}`;
+  const KEY = "super-notes:" + HOST;
 
   const DEFAULT = {
-    ui: {
-      x: null,
-      y: null,
-      w: 600,
-      h: 600,
-      sidebar: true,
-      pageSize: 15
-    },
-    data: {
-      folders: [{ id: "inbox", name: "Inbox" }],
-      notes: [],
-      selFolder: "inbox",
-      selNote: null
-    }
+    x: null,
+    y: null,
+    w: 600,
+    h: 600,
+    notes: [],
+    selected: null,
+    pageSize: 15
   };
 
-  const $ = (t, p = {}, c) => {
-    const e = document.createElement(t);
-    for (const k in p) {
-      if (k === "style") Object.assign(e.style, p[k]);
-      else if (k.startsWith("on")) e.addEventListener(k.slice(2), p[k]);
-      else e[k] = p[k];
-    }
-    if (c) (Array.isArray(c) ? c : [c]).forEach(x =>
-      e.append(x.nodeType ? x : document.createTextNode(x))
-    );
-    return e;
-  };
-
-  const load = () => {
+  function load() {
     try {
-      const s = JSON.parse(localStorage.getItem(KEY));
-      return s ? { ...DEFAULT, ...s } : structuredClone(DEFAULT);
+      return Object.assign({}, DEFAULT, JSON.parse(localStorage.getItem(KEY) || "{}"));
     } catch {
-      return structuredClone(DEFAULT);
+      return Object.assign({}, DEFAULT);
     }
-  };
+  }
 
-  const save = () => localStorage.setItem(KEY, JSON.stringify(state));
-  const uid = () => Math.random().toString(36).slice(2) + Date.now().toString(36);
-  const autoName = t => (t || "").trim().split("\n")[0]?.slice(0, 60) || "Untitled";
+  function save() {
+    localStorage.setItem(KEY, JSON.stringify(state));
+  }
 
-  let state = load();
-  let page = 1;
-  let grepQ = "";
+  const state = load();
 
-  /* ===============================
-     Root + Window
-     =============================== */
+  function uid() {
+    return Math.random().toString(36).slice(2) + Date.now().toString(36);
+  }
 
-  const root = $("div", { id: "sn-root" });
-  const modal = $("div", { className: "sn-win" });
+  function autoName(t) {
+    return (t || "").trim().split("\n")[0] || "Untitled";
+  }
 
-  root.append(modal);
-  document.body.append(root);
+  /* ---------- Styles (SAFE) ---------- */
 
-  /* ===============================
-     Styles
-     =============================== */
-
-  $("style", {
-    textContent: `
-#sn-root{
-  position:fixed;inset:0;z-index:2147483647;
+  if (!document.getElementById("super-notes-style")) {
+    const style = document.createElement("style");
+    style.id = "super-notes-style";
+    style.textContent = `
+#super-notes-root{
+  position:fixed;
+  inset:0;
+  z-index:2147483647;
   background:rgba(0,0,0,.4);
   font-family:system-ui,-apple-system,Segoe UI,Roboto
 }
-.sn-win{
+#super-notes-window{
   position:absolute;
   background:#0d1117;
   color:#e6edf3;
   border-radius:14px;
   border:1px solid #30363d;
   box-shadow:0 20px 80px rgba(0,0,0,.6);
-  overflow:hidden;
   display:flex;
-  flex-direction:column
+  flex-direction:column;
+  overflow:hidden
 }
 .sn-header{
   height:42px;
+  background:#161b22;
   display:flex;
   align-items:center;
   justify-content:space-between;
   padding:0 12px;
-  background:#161b22;
   cursor:move;
   user-select:none
 }
 .sn-body{flex:1;display:flex}
-.sn-sidebar{
+.sn-list{
   width:220px;
   border-right:1px solid #30363d;
-  background:#0d1117;
+  background:#010409;
   padding:10px;
   overflow:auto
 }
-.sn-main{flex:1;display:flex;flex-direction:column}
-.sn-list{display:flex;flex-direction:column;gap:6px}
 .sn-item{
   padding:8px 10px;
   border-radius:8px;
   background:#161b22;
+  margin-bottom:6px;
   cursor:pointer;
   font-size:13px
 }
@@ -126,7 +98,6 @@
   color:#e6edf3;
   resize:none
 }
-.sn-row{display:flex;gap:6px;margin-bottom:6px}
 .sn-btn{
   background:#21262d;
   border:1px solid #30363d;
@@ -136,48 +107,44 @@
   cursor:pointer;
   font-size:12px
 }
-.sn-btn:hover{background:#30363d}
-.sn-search{
-  width:100%;
-  padding:6px;
-  border-radius:8px;
-  border:1px solid #30363d;
-  background:#010409;
-  color:#e6edf3;
-  margin-bottom:8px
-}
-.sn-footer{
-  display:flex;
-  justify-content:space-between;
-  padding:8px;
-  border-top:1px solid #30363d
-}
-    `
-  }, document.head);
+    `;
+    document.head.appendChild(style);
+  }
 
-  /* ===============================
-     Geometry + Drag
-     =============================== */
+  /* ---------- DOM ---------- */
 
-  const applyGeom = () => {
-    const w = state.ui.w;
-    const h = state.ui.h;
-    modal.style.width = w + "px";
-    modal.style.height = h + "px";
-    modal.style.left = (state.ui.x ?? (innerWidth - w) / 2) + "px";
-    modal.style.top = (state.ui.y ?? 40) + "px";
-  };
+  const root = document.createElement("div");
+  root.id = "super-notes-root";
 
-  let drag;
-  modal.addEventListener("mousedown", e => {
+  const win = document.createElement("div");
+  win.id = "super-notes-window";
+
+  root.appendChild(win);
+  document.body.appendChild(root);
+
+  /* ---------- Geometry ---------- */
+
+  function applyGeom() {
+    const w = state.w;
+    const h = state.h;
+    win.style.width = w + "px";
+    win.style.height = h + "px";
+    win.style.left = (state.x ?? (innerWidth - w) / 2) + "px";
+    win.style.top = (state.y ?? 40) + "px";
+  }
+
+  /* ---------- Drag ---------- */
+
+  let drag = null;
+  win.addEventListener("mousedown", e => {
     if (!e.target.closest(".sn-header")) return;
-    drag = { x: e.clientX, y: e.clientY, ox: state.ui.x ?? 0, oy: state.ui.y ?? 40 };
+    drag = { x: e.clientX, y: e.clientY, ox: state.x ?? 0, oy: state.y ?? 40 };
   });
 
   window.addEventListener("mousemove", e => {
     if (!drag) return;
-    state.ui.x = drag.ox + (e.clientX - drag.x);
-    state.ui.y = drag.oy + (e.clientY - drag.y);
+    state.x = drag.ox + e.clientX - drag.x;
+    state.y = drag.oy + e.clientY - drag.y;
     applyGeom();
   });
 
@@ -186,108 +153,75 @@
     drag = null;
   });
 
-  /* ===============================
-     Header
-     =============================== */
+  /* ---------- Header ---------- */
 
-  const header = $("div", { className: "sn-header" }, [
-    $("div", {}, `Super Notes — ${HOST}`),
-    $("div", {}, [
-      $("button", { className: "sn-btn", onclick: () => newNote() }, "+"),
-      $("button", { className: "sn-btn", onclick: () => root.remove() }, "✕")
-    ])
-  ]);
+  const header = document.createElement("div");
+  header.className = "sn-header";
+  header.innerHTML = `
+    <div>Super Notes — ${HOST}</div>
+    <div>
+      <button class="sn-btn" id="sn-new">+</button>
+      <button class="sn-btn" id="sn-close">✕</button>
+    </div>
+  `;
 
-  /* ===============================
-     Sidebar
-     =============================== */
+  /* ---------- Body ---------- */
 
-  const sidebar = $("div", { className: "sn-sidebar" });
-  const search = $("input", {
-    className: "sn-search",
-    placeholder: "Search names…",
-    oninput: () => render()
-  });
+  const body = document.createElement("div");
+  body.className = "sn-body";
 
-  sidebar.append(search);
+  const list = document.createElement("div");
+  list.className = "sn-list";
 
-  /* ===============================
-     Main
-     =============================== */
+  const editor = document.createElement("textarea");
+  editor.className = "sn-editor";
+  editor.placeholder = "Write…";
 
-  const main = $("div", { className: "sn-main" });
-  const editor = $("textarea", {
-    className: "sn-editor",
-    placeholder: "Write…",
-    oninput: () => {
-      const n = note();
-      if (!n) return;
-      n.body = editor.value;
-      save();
-      render();
-    }
-  });
+  body.append(list, editor);
+  win.append(header, body);
 
-  /* ===============================
-     Logic
-     =============================== */
+  /* ---------- Logic ---------- */
 
-  const folder = () => state.data.folders.find(f => f.id === state.data.selFolder);
-  const note = () => state.data.notes.find(n => n.id === state.data.selNote);
-
-  const newNote = () => {
-    const n = { id: uid(), folder: state.data.selFolder, body: "" };
-    state.data.notes.unshift(n);
-    state.data.selNote = n.id;
+  function newNote() {
+    const n = { id: uid(), body: "" };
+    state.notes.unshift(n);
+    state.selected = n.id;
     save();
     render();
     editor.focus();
-  };
-
-  /* ===============================
-     Render
-     =============================== */
+  }
 
   function render() {
-    sidebar.innerHTML = "";
-    sidebar.append(search);
+    list.innerHTML = "";
+    state.notes.slice(0, state.pageSize).forEach(n => {
+      const d = document.createElement("div");
+      d.className = "sn-item" + (n.id === state.selected ? " active" : "");
+      d.textContent = autoName(n.body);
+      d.onclick = () => {
+        state.selected = n.id;
+        save();
+        render();
+      };
+      list.appendChild(d);
+    });
 
-    const q = search.value.toLowerCase();
-
-    const notes = state.data.notes
-      .filter(n => n.folder === state.data.selFolder)
-      .filter(n => autoName(n.body).toLowerCase().includes(q));
-
-    const pages = Math.max(1, Math.ceil(notes.length / state.ui.pageSize));
-    page = Math.min(page, pages);
-
-    notes
-      .slice((page - 1) * state.ui.pageSize, page * state.ui.pageSize)
-      .forEach(n => {
-        sidebar.append(
-          $("div", {
-            className: "sn-item" + (n.id === state.data.selNote ? " active" : ""),
-            onclick: () => {
-              state.data.selNote = n.id;
-              save();
-              render();
-            }
-          }, autoName(n.body))
-        );
-      });
-
-    main.innerHTML = "";
-    main.append(editor);
-
-    const n = note();
+    const n = state.notes.find(n => n.id === state.selected);
     editor.value = n ? n.body : "";
   }
 
-  /* ===============================
-     Init
-     =============================== */
+  editor.oninput = () => {
+    const n = state.notes.find(n => n.id === state.selected);
+    if (!n) return;
+    n.body = editor.value;
+    save();
+    render();
+  };
 
-  modal.append(header, $("div", { className: "sn-body" }, [sidebar, main]));
+  /* ---------- Events ---------- */
+
+  document.getElementById("sn-new").onclick = newNote;
+  document.getElementById("sn-close").onclick = () => root.remove();
+
   applyGeom();
   render();
 
