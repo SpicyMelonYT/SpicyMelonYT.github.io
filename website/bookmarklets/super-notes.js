@@ -11,8 +11,7 @@
     w: 600,
     h: 600,
     notes: [],
-    selected: null,
-    pageSize: 15
+    selected: null
   };
 
   function load() {
@@ -37,7 +36,7 @@
     return (t || "").trim().split("\n")[0] || "Untitled";
   }
 
-  /* ---------- Styles (SAFE) ---------- */
+  /* ---------- Styles ---------- */
 
   if (!document.getElementById("super-notes-style")) {
     const style = document.createElement("style");
@@ -106,8 +105,7 @@
   border-radius:8px;
   cursor:pointer;
   font-size:12px
-}
-    `;
+}`;
     document.head.appendChild(style);
   }
 
@@ -122,6 +120,18 @@
   root.appendChild(win);
   document.body.appendChild(root);
 
+  function show() {
+    root.style.display = "block";
+    applyGeom();
+  }
+
+  function hide() {
+    root.style.display = "none";
+    save();
+  }
+
+  window.__SUPER_NOTES_SHOW__ = show;
+
   /* ---------- Geometry ---------- */
 
   function applyGeom() {
@@ -129,22 +139,36 @@
     const h = state.h;
     win.style.width = w + "px";
     win.style.height = h + "px";
-    win.style.left = (state.x ?? (innerWidth - w) / 2) + "px";
-    win.style.top = (state.y ?? 40) + "px";
+
+    if (state.x == null || state.y == null) {
+      win.style.left = (innerWidth - w) / 2 + "px";
+      win.style.top = "40px";
+    } else {
+      win.style.left = state.x + "px";
+      win.style.top = state.y + "px";
+    }
   }
 
-  /* ---------- Drag ---------- */
+  /* ---------- Drag (fixed) ---------- */
 
   let drag = null;
+
   win.addEventListener("mousedown", e => {
     if (!e.target.closest(".sn-header")) return;
-    drag = { x: e.clientX, y: e.clientY, ox: state.x ?? 0, oy: state.y ?? 40 };
+
+    const rect = win.getBoundingClientRect();
+    drag = {
+      mx: e.clientX,
+      my: e.clientY,
+      ox: rect.left,
+      oy: rect.top
+    };
   });
 
   window.addEventListener("mousemove", e => {
     if (!drag) return;
-    state.x = drag.ox + e.clientX - drag.x;
-    state.y = drag.oy + e.clientY - drag.y;
+    state.x = drag.ox + (e.clientX - drag.mx);
+    state.y = drag.oy + (e.clientY - drag.my);
     applyGeom();
   });
 
@@ -153,7 +177,7 @@
     drag = null;
   });
 
-  /* ---------- Header ---------- */
+  /* ---------- UI ---------- */
 
   const header = document.createElement("div");
   header.className = "sn-header";
@@ -164,8 +188,6 @@
       <button class="sn-btn" id="sn-close">✕</button>
     </div>
   `;
-
-  /* ---------- Body ---------- */
 
   const body = document.createElement("div");
   body.className = "sn-body";
@@ -193,7 +215,7 @@
 
   function render() {
     list.innerHTML = "";
-    state.notes.slice(0, state.pageSize).forEach(n => {
+    state.notes.forEach(n => {
       const d = document.createElement("div");
       d.className = "sn-item" + (n.id === state.selected ? " active" : "");
       d.textContent = autoName(n.body);
@@ -217,12 +239,11 @@
     render();
   };
 
-  /* ---------- Events ---------- */
-
   document.getElementById("sn-new").onclick = newNote;
-  document.getElementById("sn-close").onclick = () => root.remove();
+  document.getElementById("sn-close").onclick = hide;
 
   applyGeom();
   render();
+  show();
 
 })();
